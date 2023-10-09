@@ -1,16 +1,21 @@
 import styles from "./question.module.scss";
 import image from "../../assets/man.png";
 import { Link } from "react-router-dom";
-import { Heart, MessageSquare, Eye } from "react-feather";
+import { Heart, MessageSquare, Eye, MoreVertical } from "react-feather";
 
 const Question = () => {
   return (
     <div className={styles.question}>
       <header>
-        <img src={image} alt="image" />
-        <Link to={"/"}>
-          <h3>Benedict Umeozor</h3>
-        </Link>
+        <div className={styles.user}>
+          <img src={image} alt="image" />
+          <Link to={"/"}>
+            <h3>Benedict Umeozor</h3>
+          </Link>
+        </div>
+        <div className={styles.ellipsis}>
+          <MoreVertical />
+        </div>
       </header>
       <div className={styles.body}>
         <Link to={"/"}>

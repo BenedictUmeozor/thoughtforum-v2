@@ -9,7 +9,7 @@
 
 :root {
   font-size: 16px;
-  font-family: "Montserrat", sans-serif;
+  font-family: "Inter", sans-serif;
   --main: #0040ff;
   --body-bg: #f0f1fe;
   --primary: #ffffff;
@@ -22,6 +22,10 @@
   --primary: #262d34;
   --paragragh: #949495;
   --text-color: #ffffff;
+}
+
+::-webkit-scrollbar {
+  display: none;
 }
 
 body {

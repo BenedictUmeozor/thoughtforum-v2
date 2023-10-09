@@ -6,3 +6,11 @@ export const getTheme = () => {
   }
   return { theme };
 };
+
+export const setFixedBody = (value: boolean) => {
+  if (value) {
+    document.body.style.overflowY = "hidden";
+  } else {
+    document.body.style.overflowY = "auto";
+  }
+};

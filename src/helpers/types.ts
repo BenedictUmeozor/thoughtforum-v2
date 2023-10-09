@@ -13,3 +13,7 @@ export type ThemeType = {
   theme: string;
   _setTheme: (theme: string) => void;
 };
+
+export type FunctionProp = {
+  onClick: () => void;
+};
