@@ -3,7 +3,13 @@
 .header {
   background-color: var(--primary);
   padding: 1.5rem 0;
+  position: sticky;
+  top: 0;
   z-index: 9;
+
+  &.scrolled {
+    background-color: var(--scrolled);
+  }
 
   .container {
     display: flex;

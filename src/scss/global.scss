@@ -12,7 +12,8 @@
   font-family: "Inter", sans-serif;
   --main: #0040ff;
   --body-bg: #f0f1fe;
-  --primary: #ffffff;
+  --primary: #fdfdfd;
+  --scrolled: rgba(250, 250, 250, 0.7);
   --paragraph: #777777;
   --text-color: #111111;
 }
@@ -20,8 +21,9 @@
 :root.dark {
   --body-bg: #1e252b;
   --primary: #262d34;
+  --scrolled: rgba(20, 20, 20, 0.7);
   --paragragh: #949495;
-  --text-color: #ffffff;
+  --text-color: #fdfdfd;
 }
 
 ::-webkit-scrollbar {

@@ -13,14 +13,33 @@ import { setFixedBody } from "../../utils";
 
 const Header = () => {
   const [showNav, setShowNav] = useState(false);
+  const [hasScrolled, setHasScrolled] = useState(false);
 
   useEffect(() => {
     setFixedBody(showNav);
   }, [showNav]);
 
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 0) {
+        setHasScrolled(true);
+      } else {
+        setHasScrolled(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
   return (
     <>
-      <header className={styles.header}>
+      <header
+        className={`${styles.header} ${hasScrolled ? styles.scrolled : ""}`}
+      >
         <Container className={styles.container}>
           <MobileDiv>
             <Link to="/search">
