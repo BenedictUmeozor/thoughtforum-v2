@@ -1,0 +1,41 @@
+@import "../../scss/breakpoints";
+
+.nav {
+  @include mobile {
+    display: none;
+  }
+
+  ul {
+    display: flex;
+    align-items: center;
+    column-gap: 1rem;
+
+    li {
+      svg {
+        height: 1.25rem;
+        width: 1.25rem;
+        transition: all 0.3s ease;
+
+        &:hover {
+          color: var(--main);
+          transform: translateY(-2px);
+        }
+      }
+
+      a {
+        font-weight: 450;
+        color: #777;
+        font-family: "Montserrat", sans-serif;
+
+        &.active {
+          color: var(--main);
+        }
+
+        &:hover {
+          color: var(--main);
+          transform: translateY(-2px);
+        }
+      }
+    }
+  }
+}
