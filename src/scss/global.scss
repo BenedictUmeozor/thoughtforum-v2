@@ -43,7 +43,7 @@ body {
 a {
   color: var(--text-color);
   text-decoration: none;
-  display: block;
+  display: inline-block;
   transition: all 0.3s ease-in-out;
 }
 

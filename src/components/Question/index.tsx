@@ -40,6 +40,7 @@ const Question = () => {
           )}
         </div>
       </header>
+      <p className={styles.category}>in <Link to={"/"}>education</Link></p>
       <div className={styles.body}>
         <Link to={"/"}>
           <h2>Lorem ipsum dolor sit amet consectetur.</h2>
