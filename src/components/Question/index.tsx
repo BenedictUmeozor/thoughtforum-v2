@@ -1,9 +1,19 @@
 import styles from "./question.module.scss";
 import image from "../../assets/man.png";
 import { Link } from "react-router-dom";
-import { Heart, MessageSquare, Eye, MoreVertical } from "react-feather";
+import {
+  Heart,
+  MessageSquare,
+  Eye,
+  MoreVertical,
+  Trash2,
+  Edit2,
+} from "react-feather";
+import { useState } from "react";
 
 const Question = () => {
+  const [showMenu, setShowMenu] = useState(false);
+
   return (
     <div className={styles.question}>
       <header>
@@ -13,8 +23,21 @@ const Question = () => {
             <h3>Benedict Umeozor</h3>
           </Link>
         </div>
-        <div className={styles.ellipsis}>
+        <div
+          className={styles.ellipsis}
+          onClick={() => setShowMenu((prev) => !prev)}
+        >
           <MoreVertical />
+          {showMenu && (
+            <div className={styles.div}>
+              <div>
+                Edit <Edit2 />
+              </div>
+              <div>
+                Delete <Trash2 />
+              </div>
+            </div>
+          )}
         </div>
       </header>
       <div className={styles.body}>

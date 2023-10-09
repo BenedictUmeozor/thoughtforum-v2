@@ -20,6 +20,12 @@ const Header = () => {
   }, [showNav]);
 
   useEffect(() => {
+    if (showNav) {
+      setHasScrolled(false);
+    }
+  }, [showNav]);
+
+  useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 0) {
         setHasScrolled(true);
