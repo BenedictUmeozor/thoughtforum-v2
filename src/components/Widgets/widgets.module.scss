@@ -1,0 +1,13 @@
+.button {
+  padding: 0.4rem 0.75rem;
+  background-color: var(--main);
+  color: #fefefe;
+  border: 0.15rem solid transparent;
+  border-radius: 0.25rem;
+
+  &:hover {
+    background-color: transparent;
+    border-color: var(--main);
+    color: var(--text-color);
+  }
+}
