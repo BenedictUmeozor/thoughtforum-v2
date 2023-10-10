@@ -1,6 +1,6 @@
 @import "../../scss/breakpoints";
 
-.question {
+.answer {
   background-color: var(--primary);
   border-radius: 0.5rem;
   padding: 1rem;
@@ -89,34 +89,8 @@
     }
   }
 
-  .category {
-    font-size: 0.8rem;
-
-    a {
-      color: var(--main);
-
-      &:hover {
-        text-decoration: underline;
-      }
-    }
-  }
-
   .body {
     margin-bottom: 0.75rem;
-
-    a {
-      margin-bottom: 0.5rem;
-
-      &:hover {
-        text-decoration: underline;
-      }
-
-      h2 {
-        font-weight: 500;
-        font-size: 1.1rem;
-        font-family: "Inter", sans-serif;
-      }
-    }
 
     p {
       font-size: 0.95rem;
@@ -130,9 +104,6 @@
   }
 
   footer {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
     margin-top: 1rem;
 
     .action {
@@ -149,22 +120,6 @@
           width: 1.25rem;
           cursor: pointer;
         }
-      }
-    }
-
-    a {
-      display: flex;
-      align-items: center;
-      column-gap: 0.25rem;
-      font-size: 0.9rem;
-
-      &:hover {
-        color: var(--main);
-      }
-
-      svg {
-        width: 1rem;
-        height: 1rem;
       }
     }
   }

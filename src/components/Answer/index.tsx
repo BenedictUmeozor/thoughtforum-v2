@@ -1,21 +1,14 @@
-import styles from "./question.module.scss";
 import { Link } from "react-router-dom";
-import {
-  Heart,
-  MessageSquare,
-  Eye,
-  MoreVertical,
-  Trash2,
-  Edit2,
-} from "react-feather";
 import { useState } from "react";
 import Avatar from "../Avatar";
+import styles from "./answer.module.scss";
+import { Edit2, Heart, MoreVertical, Trash2 } from "react-feather";
 
-const Question = () => {
+const Answer = () => {
   const [showMenu, setShowMenu] = useState(false);
 
   return (
-    <div className={styles.question}>
+    <div className={styles.answer}>
       <header>
         <div className={styles.user}>
           <Avatar />
@@ -40,11 +33,7 @@ const Question = () => {
           )}
         </div>
       </header>
-      <p className={styles.category}>in <Link to={"/"}>education</Link></p>
       <div className={styles.body}>
-        <Link to={"/questions"}>
-          <h2>Lorem ipsum dolor sit amet consectetur.</h2>
-        </Link>
         <p>
           Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ipsa non
           tempore ab odit quibusdam repudiandae, quaerat laudantium facere
@@ -58,17 +47,9 @@ const Question = () => {
             <Heart />
             <p>14</p>
           </div>
-          <div>
-            <MessageSquare />
-            <p>14</p>
-          </div>
         </div>
-        <Link to={"/"}>
-          <Eye />
-          See Answers
-        </Link>
       </footer>
     </div>
   );
 };
-export default Question;
+export default Answer;
