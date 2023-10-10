@@ -5,6 +5,7 @@ import { useThemeContext } from "../hooks";
 import { Suspense, useEffect } from "react";
 import { getTheme } from "../utils";
 import Loader from "./Loader";
+import Footer from "../components/Footer";
 
 const RootLayout = () => {
   const { _setTheme } = useThemeContext();
@@ -22,7 +23,7 @@ const RootLayout = () => {
           <Outlet />
         </Suspense>
       </section>
-      <footer></footer>
+      <Footer />
     </main>
   );
 };

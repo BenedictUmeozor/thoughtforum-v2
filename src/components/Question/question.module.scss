@@ -4,7 +4,7 @@
   background-color: var(--primary);
   border-radius: 1rem;
   padding: 1rem;
-  box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
   margin-bottom: 1rem;
   font-family: "Inter", sans-serif;
 
@@ -28,6 +28,13 @@
       display: flex;
       align-items: center;
       column-gap: 0.5rem;
+
+      a {
+        h3 {
+          color: var(--secondary);
+          font-size: 1rem;
+        }
+      }
     }
 
     .ellipsis {
@@ -107,7 +114,7 @@
       h2 {
         font-weight: 500;
         font-size: 1.1rem;
-        font-family: "Poppins", sans-serif;
+        font-family: "Inter", sans-serif;
       }
     }
 

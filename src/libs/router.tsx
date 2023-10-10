@@ -3,14 +3,22 @@ import {
   createRoutesFromElements,
   Route,
 } from "react-router-dom";
-import RootLayout from "../layout";
-import { lazy } from "react";
+import { lazy, Suspense } from "react";
+import Loader from "../layout/Loader";
 
+const RootLayout = lazy(() => import("../layout"));
 const Home = lazy(() => import("../pages/Home"));
 
 const router = createBrowserRouter(
   createRoutesFromElements(
-    <Route path="/" element={<RootLayout />}>
+    <Route
+      path="/"
+      element={
+        <Suspense fallback={<Loader />}>
+          <RootLayout />
+        </Suspense>
+      }
+    >
       <Route index element={<Home />} />
     </Route>
   )
