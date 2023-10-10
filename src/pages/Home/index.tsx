@@ -1,3 +1,4 @@
+import HotQuestions from "../../components/HotQuestions";
 import Question from "../../components/Question";
 import Container from "../../layout/Container";
 import DesktopDiv from "../../layout/DesktopDiv";
@@ -37,6 +38,7 @@ const Home = () => {
           <DesktopDiv>
             <QuestionBox />
           </DesktopDiv>
+          <HotQuestions />
         </div>
       </Container>
     </main>
