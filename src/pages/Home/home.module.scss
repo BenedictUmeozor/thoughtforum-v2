@@ -70,6 +70,12 @@
 }
 
 .questionBox {
+  margin-top: 0.5rem;
+
+  @include mobile {
+    margin-top: 0;
+  }
+
   .button {
     background-color: var(--primary);
     text-align: center;
