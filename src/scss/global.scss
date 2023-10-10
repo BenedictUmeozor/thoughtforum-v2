@@ -10,7 +10,7 @@
 :root {
   font-size: 16px;
   font-family: "Inter", sans-serif;
-  --main: #0040ff;
+  --main: #2443a0;
   --body-bg: #f0f1fe;
   --primary: #fdfdfd;
   --scrolled: rgba(250, 250, 250, 0.7);
@@ -49,6 +49,7 @@ a {
 
 button {
   transition: all 0.3s ease-in-out;
+  cursor: pointer;
 }
 
 ul {
@@ -69,4 +70,18 @@ input {
   &:focus {
     outline: none;
   }
+}
+
+.avatar {
+  height: 1.8rem;
+  width: 1.8rem;
+  background-color: cadetblue;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #fefefe;
+  font-family: "Poppins", sans-serif;
 }

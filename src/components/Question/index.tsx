@@ -1,5 +1,4 @@
 import styles from "./question.module.scss";
-import image from "../../assets/man.png";
 import { Link } from "react-router-dom";
 import {
   Heart,
@@ -10,6 +9,7 @@ import {
   Edit2,
 } from "react-feather";
 import { useState } from "react";
+import Avatar from "../Avatar";
 
 const Question = () => {
   const [showMenu, setShowMenu] = useState(false);
@@ -18,7 +18,7 @@ const Question = () => {
     <div className={styles.question}>
       <header>
         <div className={styles.user}>
-          <img src={image} alt="image" />
+          <Avatar />
           <Link to={"/"}>
             <h3>Benedict Umeozor</h3>
           </Link>

@@ -1,5 +1,8 @@
 import Question from "../../components/Question";
 import Container from "../../layout/Container";
+import DesktopDiv from "../../layout/DesktopDiv";
+import MobileDiv from "../../layout/MobileDiv";
+import QuestionBox from "./QuestionBox";
 import styles from "./home.module.scss";
 
 const Home = () => {
@@ -7,6 +10,9 @@ const Home = () => {
     <main className={styles.main}>
       <Container className={styles.container}>
         <div className={styles.left}>
+          <MobileDiv>
+            <QuestionBox />
+          </MobileDiv>
           <div className={styles.filters}>
             <div className={`${styles.filter} ${styles.active}`}>
               <p>Recent</p>
@@ -27,7 +33,11 @@ const Home = () => {
             <Question />
           </div>
         </div>
-        <div className={styles.right}></div>
+        <div className={styles.right}>
+          <DesktopDiv>
+            <QuestionBox />
+          </DesktopDiv>
+        </div>
       </Container>
     </main>
   );
