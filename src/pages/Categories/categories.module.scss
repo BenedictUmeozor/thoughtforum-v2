@@ -1,0 +1,57 @@
+@import "../../scss/breakpoints";
+
+.main {
+  .container {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    column-gap: 1.5rem;
+
+    @include mobile {
+      grid-template-columns: 1fr;
+      row-gap: 1.5rem;
+    }
+
+    .categories {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      column-gap: 0.4rem;
+      row-gap: 0.5rem;
+      margin-top: 1rem;
+      margin-bottom: 1rem;
+
+      a {
+        padding: 0.4rem 0.8rem;
+        border: 1px solid #ccc;
+        border-radius: 0.2rem;
+        text-transform: capitalize;
+        transition: all 0.2s ease-in;
+        font-size: 0.925rem;
+
+        &.active {
+          color: #fff;
+          background-color: var(--main);
+          border-color: var(--main);
+        }
+
+        &:hover {
+          color: var(--main);
+          background-color: transparent;
+          border-color: var(--main);
+        }
+      }
+    }
+
+    .page {
+      .title {
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-size: 1.1rem;
+        font-weight: 500;
+        opacity: 0.9;
+        color: var(--main);
+        margin-bottom: 1.25rem;
+      }
+    }
+  }
+}

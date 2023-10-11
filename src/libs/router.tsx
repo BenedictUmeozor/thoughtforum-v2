@@ -13,6 +13,8 @@ const Login = lazy(() => import("../pages/(auth)/Login"));
 const Questions = lazy(() => import("../pages/Questions"));
 const Profile = lazy(() => import("../pages/(user)/Profile"));
 const UserProfile = lazy(() => import("../pages/(user)/UserProfile"));
+const Categories = lazy(() => import("../pages/Categories"));
+const SearchPage = lazy(() => import("../pages/Search"));
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -28,6 +30,8 @@ const router = createBrowserRouter(
       <Route path="register" element={<Register />} />
       <Route path="login" element={<Login />} />
       <Route path="questions" element={<Questions />} />
+      <Route path="search" element={<SearchPage />} />
+      <Route path="categories" element={<Categories />} />
       <Route path="profile" element={<Profile />} />
       <Route path="profile/user" element={<UserProfile />} />
     </Route>

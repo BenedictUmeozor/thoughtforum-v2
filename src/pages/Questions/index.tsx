@@ -6,6 +6,7 @@ import { Heart, MessageCircle, MessageSquare } from "react-feather";
 import FollowBtn from "../../components/Widgets/FollowBtn";
 import Avatar from "../../components/Avatar";
 import Answer from "../../components/Answer";
+import RelatedQuestions from "../../components/RelatedQuestions";
 
 const Questions = () => {
   return (
@@ -79,6 +80,7 @@ const Questions = () => {
           </div>
         </div>
         <div className={styles.right}>
+          <RelatedQuestions />
           <TopMembers />
         </div>
       </Container>
