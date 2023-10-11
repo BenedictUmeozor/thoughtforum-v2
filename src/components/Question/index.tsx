@@ -23,11 +23,9 @@ const Question = () => {
             <h3>Benedict Umeozor</h3>
           </Link>
         </div>
-        <div
-          className={styles.ellipsis}
-          onClick={() => setShowMenu((prev) => !prev)}
-        >
-          <MoreVertical />
+        <div className={styles.ellipsis}>
+          <MoreVertical onClick={() => setShowMenu((prev) => !prev)} />
+
           {showMenu && (
             <div className={styles.div}>
               <div>
@@ -40,7 +38,9 @@ const Question = () => {
           )}
         </div>
       </header>
-      <p className={styles.category}>in <Link to={"/"}>education</Link></p>
+      <p className={styles.category}>
+        in <Link to={"/"}>education</Link>
+      </p>
       <div className={styles.body}>
         <Link to={"/questions"}>
           <h2>Lorem ipsum dolor sit amet consectetur.</h2>
