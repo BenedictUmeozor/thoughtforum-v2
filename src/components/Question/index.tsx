@@ -13,10 +13,12 @@ import Avatar from "../Avatar";
 import { setFixedBody } from "../../utils";
 import { AnimatePresence } from "framer-motion";
 import EditQuestionForm from "../Forms/EditQuestionForm";
+import LikesModal from "../UserModal/LikesModal";
 
 const Question = () => {
   const [showMenu, setShowMenu] = useState(false);
   const [showForm, setShowForm] = useState(false);
+  const [showLikes, setShowLikes] = useState(false);
 
   const displayForm = () => {
     setShowForm(true);
@@ -30,10 +32,23 @@ const Question = () => {
     setFixedBody(false);
   };
 
+  const displayLikes = () => {
+    setShowLikes(true);
+    setFixedBody(true);
+  };
+
+  const hideLikes = () => {
+    setShowLikes(false);
+    setFixedBody(false);
+  };
+
   return (
     <>
       <AnimatePresence>
         {showForm && <EditQuestionForm onClick={hideForm} />}
+      </AnimatePresence>
+      <AnimatePresence>
+        {showLikes && <LikesModal onClose={hideLikes} />}
       </AnimatePresence>
       <div className={styles.question}>
         <header>
@@ -76,7 +91,7 @@ const Question = () => {
           <div className={styles.action}>
             <div>
               <Heart />
-              <p>14</p>
+              <p onClick={displayLikes}>14</p>
             </div>
             <div>
               <MessageSquare />

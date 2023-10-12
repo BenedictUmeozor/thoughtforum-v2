@@ -25,7 +25,10 @@ const Register = () => {
               <div className={styles.line}></div>
             </div>
             <div className={styles.field}>
-              <input type="text" placeholder="Gender" />
+              <select>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+              </select>
               <div className={styles.line}></div>
             </div>
             <div className={styles.field}>

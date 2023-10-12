@@ -1,13 +1,28 @@
 .button {
-  padding: 0.4rem 0.75rem;
-  background-color: var(--main);
-  color: #fefefe;
-  border: 0.15rem solid transparent;
-  border-radius: 0.25rem;
+  display: flex;
+  align-items: center;
+  column-gap: 0.25rem;
+  border: 0;
+  background-color: transparent;
+
+  svg {
+    width: 1.25rem;
+    color: var(--main);
+  }
+
+  p {
+    font-size: 0.95rem;
+    color: var(--main);
+    font-weight: 600;
+    font-family: "Poppins", sans-serif;
+  }
 
   &:hover {
-    background-color: transparent;
-    border-color: var(--main);
-    color: var(--text-color);
+    svg {
+      opacity: 0.8;
+    }
+    p {
+      opacity: 0.8;
+    }
   }
 }

@@ -55,6 +55,22 @@
         .field {
           margin-bottom: 1.25rem;
 
+          select {
+            appearance: none;
+            border: none;
+            padding: 0.25rem 0;
+            background-color: transparent;
+            height: 45px;
+
+            &:focus {
+              outline: none;
+
+              & ~ .line {
+                background-color: var(--main);
+              }
+            }
+          }
+
           input {
             appearance: none;
             border: none;
