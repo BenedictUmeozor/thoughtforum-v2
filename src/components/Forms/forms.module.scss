@@ -1,0 +1,82 @@
+.form {
+  .close {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    margin-bottom: 0;
+
+    svg {
+      width: 2rem;
+      color: crimson;
+      cursor: pointer;
+    }
+  }
+
+  .title {
+    font-size: 1rem;
+    font-family: "Poppins", sans-serif;
+    font-weight: 500;
+    margin-bottom: 1rem;
+  }
+
+  label {
+    display: block;
+    margin-bottom: 0.25rem;
+    font-size: 0.95rem;
+  }
+
+  button {
+    height: 50px;
+    margin-top: 1rem;
+    width: 100%;
+    border-radius: 0.25rem;
+    background-color: var(--main);
+    color: #fff;
+    border: 0.15rem solid transparent;
+
+    &:hover {
+      background-color: transparent;
+      color: var(--main);
+      border-color: var(--main);
+    }
+  }
+
+  .field {
+    margin-bottom: 0.75rem;
+  }
+
+  input {
+    width: 100%;
+    border: 0.15rem solid #ddd;
+    border-radius: 0.25rem;
+    height: 45px;
+
+    &:focus {
+      outline: none;
+      border-color: var(--main);
+    }
+  }
+
+  select {
+    width: 100%;
+    border: 0.15rem solid #ddd;
+    border-radius: 0.25rem;
+    height: 45px;
+
+    &:focus {
+      outline: none;
+      border-color: var(--main);
+    }
+  }
+
+  textarea {
+    width: 100%;
+    border: 0.15rem solid #ddd;
+    border-radius: 0.25rem;
+
+    &:focus {
+      outline: none;
+      border-color: var(--main);
+    }
+  }
+}

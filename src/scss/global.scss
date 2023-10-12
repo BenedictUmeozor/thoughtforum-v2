@@ -61,9 +61,26 @@ ul {
   list-style-type: none;
 }
 
-input {
+input,
+select {
   width: 100%;
   height: 45px;
+  border-radius: 0.25rem solid transparent;
+  padding: 0.5rem;
+  font-family: "Montserrat", sans-serif;
+
+  &::placeholder {
+    font-family: "Montserrat", sans-serif;
+  }
+
+  &:focus {
+    outline: none;
+  }
+}
+
+textarea {
+  width: 100%;
+
   border-radius: 0.25rem solid transparent;
   padding: 0.5rem;
   font-family: "Montserrat", sans-serif;
