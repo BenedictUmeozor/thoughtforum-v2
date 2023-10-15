@@ -41,10 +41,14 @@
     align-items: center;
     column-gap: 0.5rem;
 
-    h3 {
+    a {
       font-weight: 500;
       font-size: 0.95rem;
       color: var(--secondary);
+
+      &:hover {
+        text-decoration: underline;
+      }
     }
   }
 
@@ -53,6 +57,14 @@
 
     p {
       font-size: 0.9rem;
+
+      a {
+        color: var(--main);
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
     }
   }
 

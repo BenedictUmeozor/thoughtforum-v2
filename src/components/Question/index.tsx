@@ -14,11 +14,48 @@ import { setFixedBody } from "../../utils";
 import { AnimatePresence } from "framer-motion";
 import EditQuestionForm from "../Forms/EditQuestionForm";
 import LikesModal from "../UserModal/LikesModal";
+import { Question as QuestionType } from "../../helpers/types";
+import { formatRFC7231 } from "date-fns";
+import { useAppDispatch, useAppSelector, useSocket } from "../../hooks";
+import { useAxiosAuth, useAxiosInstance } from "../../hooks/useAxios";
+import toast from "react-hot-toast";
+import { setQuestions } from "../../features/QuestionSlice";
 
-const Question = () => {
+const Question = ({ question }: { question: QuestionType }) => {
+  const { _id } = useAppSelector((state) => state.auth);
   const [showMenu, setShowMenu] = useState(false);
   const [showForm, setShowForm] = useState(false);
   const [showLikes, setShowLikes] = useState(false);
+  const dispatch = useAppDispatch();
+  const user = useAppSelector((state) => state.user);
+
+  const { fetchData: likeFetch, isLoading: likeLoading } = useAxiosAuth(
+    "/questions/like/" + question._id,
+    "post"
+  );
+  const { fetchData } = useAxiosInstance("/questions");
+  const socket = useSocket();
+
+  const likeQuestion = async () => {
+    if (!_id) {
+      toast.error("You need to be logged in");
+      return;
+    }
+    const data = await likeFetch();
+    if (data) {
+      if (question._id !== _id) {
+        if (!question.likes.includes(_id)) {
+          socket?.emit("like", {
+            _id: question.user._id,
+            type: "question",
+            name: user?.name,
+          });
+        }
+      }
+      const questions = await fetchData();
+      dispatch(setQuestions(questions));
+    }
+  };
 
   const displayForm = () => {
     setShowForm(true);
@@ -53,13 +90,15 @@ const Question = () => {
       <div className={styles.question}>
         <header>
           <div className={styles.user}>
-            <Avatar />
-            <Link to={"/"}>
-              <h3>Benedict Umeozor</h3>
+            <Avatar name={question.user.name} />
+            <Link to={"/user/" + question.user._id}>
+              <h3>{question.user.name}</h3>
             </Link>
           </div>
           <div className={styles.ellipsis}>
-            <MoreVertical onClick={() => setShowMenu((prev) => !prev)} />
+            {question.user._id === _id && (
+              <MoreVertical onClick={() => setShowMenu((prev) => !prev)} />
+            )}
 
             {showMenu && (
               <div className={styles.div}>
@@ -74,31 +113,49 @@ const Question = () => {
           </div>
         </header>
         <p className={styles.category}>
-          in <Link to={"/"}>education</Link>
+          in{" "}
+          <Link to={"/categories/" + question.category._id}>
+            {question.category.title}
+          </Link>
         </p>
         <div className={styles.body}>
-          <Link to={"/questions"}>
-            <h2>Lorem ipsum dolor sit amet consectetur.</h2>
+          <Link to={"/questions/" + question._id}>
+            <h2>{question.title}</h2>
           </Link>
           <p>
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ipsa non
-            tempore ab odit quibusdam repudiandae, quaerat laudantium facere
-            impedit ipsum.
+            {question.body.substring(0, 120) +
+              [
+                question.body.length > question.body.substring(0, 120).length
+                  ? "..."
+                  : "",
+              ]}
           </p>
-          <small>Asked: 8th October, 2023</small>
+          <small>Asked: {formatRFC7231(new Date(question.createdAt))}</small>
         </div>
         <footer>
           <div className={styles.action}>
             <div>
-              <Heart />
-              <p onClick={displayLikes}>14</p>
+              <Heart
+                fill={_id && question.likes.includes(_id) ? "crimson" : "none"}
+                stroke={
+                  _id && question.likes.includes(_id)
+                    ? "crimson"
+                    : "currentColor"
+                }
+                style={{
+                  opacity: likeLoading ? 0.5 : 1,
+                  pointerEvents: likeLoading ? "none" : "all",
+                }}
+                onClick={likeQuestion}
+              />
+              <p onClick={displayLikes}>{question.likes.length}</p>
             </div>
             <div>
               <MessageSquare />
-              <p>14</p>
+              <p>{question.answers.length}</p>
             </div>
           </div>
-          <Link to={"/"}>
+          <Link to={"/questions/" + question._id}>
             <Eye />
             See Answers
           </Link>

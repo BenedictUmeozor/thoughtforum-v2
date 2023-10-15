@@ -5,6 +5,16 @@
   border: 0;
   background-color: transparent;
 
+  &.following {
+    svg {
+      color: #777;
+    }
+
+    p {
+      color: #777;
+    }
+  }
+
   svg {
     width: 1.25rem;
     color: var(--main);

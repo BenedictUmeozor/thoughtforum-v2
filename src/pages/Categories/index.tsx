@@ -1,4 +1,5 @@
-import { Link } from "react-router-dom";
+import { NavLink, useNavigate, useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
 import HotQuestions from "../../components/HotQuestions";
 import Question from "../../components/Question";
 import TopMembers from "../../components/TopMembers";
@@ -7,17 +8,40 @@ import DesktopDiv from "../../layout/DesktopDiv";
 import MobileDiv from "../../layout/MobileDiv";
 import QuestionBox from "../Home/QuestionBox";
 import styles from "./categories.module.scss";
-
-const categories = [
-  "technology",
-  "career",
-  "kdrama",
-  "education",
-  "finance",
-  "science and technology",
-];
+import { useAppSelector } from "../../hooks";
+import { useAxiosInstance } from "../../hooks/useAxios";
+import toast from "react-hot-toast";
+import { Category, Question as QuestionType } from "../../helpers/types";
+import { Skeleton } from "@mui/material";
 
 const Categories = () => {
+  const { id } = useParams();
+  const categories = useAppSelector((state) => state.categories);
+  const [category, setCategory] = useState<Category | null>(null);
+  const [questions, setQuestions] = useState<QuestionType[] | null>(null);
+
+  const { isLoading, error, fetchData } = useAxiosInstance(
+    "/questions/category/" + id
+  );
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (error) {
+      toast.error("Something went wrong");
+      navigate("/error-page");
+    }
+  }, [error]);
+
+  useEffect(() => {
+    const setData = async () => {
+      const data = await fetchData();
+      setQuestions(data);
+      setCategory(categories.find((c) => c._id === id)!);
+    };
+    setData();
+  }, [categories, id]);
+
   return (
     <main className={styles.main}>
       <Container className={styles.container}>
@@ -27,19 +51,57 @@ const Categories = () => {
           </MobileDiv>
           <div className={styles.categories}>
             {categories.map((category) => (
-              <Link to={"/"} key={category} className={styles.category}>
-                {category}
-              </Link>
+              <NavLink
+                to={"/categories/" + category._id}
+                key={category._id}
+                className={({ isActive }) => (isActive ? styles.active : "")}
+              >
+                {category.title}
+              </NavLink>
             ))}
           </div>
           <div className={styles.page}>
-            <h3 className={styles.title}>Technology</h3>
+            <h3 className={styles.title}>{category?.title}</h3>
 
             <div className={styles.questions}>
-              <Question />
-              <Question />
-              <Question />
-              <Question />
+              {isLoading ? (
+                <>
+                  <Skeleton
+                    variant="rectangular"
+                    width={"100%"}
+                    height={200}
+                    style={{ marginBottom: "1rem" }}
+                  />
+                  <Skeleton
+                    variant="rectangular"
+                    width={"100%"}
+                    height={200}
+                    style={{ marginBottom: "1rem" }}
+                  />
+                  <Skeleton
+                    variant="rectangular"
+                    width={"100%"}
+                    height={200}
+                    style={{ marginBottom: "1rem" }}
+                  />
+                  <Skeleton
+                    variant="rectangular"
+                    width={"100%"}
+                    height={200}
+                    style={{ marginBottom: "1rem" }}
+                  />
+                </>
+              ) : questions?.length ? (
+                <>
+                  {questions?.map((question) => (
+                    <Question key={question._id} question={question} />
+                  ))}
+                </>
+              ) : (
+                <>
+                  <div className={styles.noData}>No questions to show</div>
+                </>
+              )}
             </div>
           </div>
         </div>

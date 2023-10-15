@@ -88,6 +88,15 @@
       margin-top: 0.5rem;
     }
 
+    .text {
+      font-size: 0.925rem;
+
+      a {
+        color: var(--main);
+        text-decoration: underline;
+      }
+    }
+
     button {
       background-color: var(--main);
       color: #fefefe;
@@ -129,4 +138,10 @@
       }
     }
   }
+}
+
+.noData {
+  text-align: center;
+  padding: 2.5rem 0;
+  font-size: 0;
 }

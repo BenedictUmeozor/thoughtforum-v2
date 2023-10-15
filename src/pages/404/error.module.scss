@@ -1,0 +1,33 @@
+@import "../../scss/breakpoints";
+
+.main {
+  padding: 1.5rem 0;
+
+  @include mobile {
+    text-align: center;
+  }
+
+  h2 {
+    font-size: 4rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    font-family: "Poppins", sans-serif;
+
+    span {
+      color: var(--main);
+    }
+  }
+
+  a {
+    padding: 0.4rem 1.25rem;
+    color: var(--primary);
+    background-color: var(--main);
+    border: 0.15rem solid transparent;
+
+    &:hover {
+      background-color: transparent;
+      border-color: var(--main);
+      color: var(--main);
+    }
+  }
+}

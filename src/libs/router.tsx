@@ -5,6 +5,7 @@ import {
 } from "react-router-dom";
 import { lazy, Suspense } from "react";
 import Loader from "../layout/Loader";
+import ErrorPage from "../pages/404";
 
 const RootLayout = lazy(() => import("../layout"));
 const Home = lazy(() => import("../pages/Home"));
@@ -29,11 +30,12 @@ const router = createBrowserRouter(
       <Route index element={<Home />} />
       <Route path="register" element={<Register />} />
       <Route path="login" element={<Login />} />
-      <Route path="questions" element={<Questions />} />
       <Route path="search" element={<SearchPage />} />
-      <Route path="categories" element={<Categories />} />
       <Route path="profile" element={<Profile />} />
-      <Route path="profile/user" element={<UserProfile />} />
+      <Route path="questions/:id" element={<Questions />} />
+      <Route path="categories/:id" element={<Categories />} />
+      <Route path="user/:id" element={<UserProfile />} />
+      <Route path="*" element={<ErrorPage />} />
     </Route>
   )
 );

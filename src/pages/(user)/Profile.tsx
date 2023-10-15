@@ -8,6 +8,7 @@ import { useState } from "react";
 import { setFixedBody } from "../../utils";
 import EditProfileForm from "../../components/Forms/EditProfileForm";
 import UserModal from "../../components/UserModal";
+import ProtectedLayout from "../../layout/ProtectedLayout";
 
 const Profile = () => {
   const [showForm, setShowForm] = useState(false);
@@ -43,15 +44,15 @@ const Profile = () => {
 
   return (
     <>
-      <AnimatePresence>
-        {showForm && (
-          <EditProfileForm key={"edit-profile"} onClick={hideForm} />
-        )}
-        {showModal && (
-          <UserModal key={"user-modal"} title={title} onClose={hideModal} />
-        )}
-      </AnimatePresence>
-      <main className={styles.main}>
+      <ProtectedLayout className={styles.main}>
+        <AnimatePresence>
+          {showForm && (
+            <EditProfileForm key={"edit-profile"} onClick={hideForm} />
+          )}
+          {showModal && (
+            <UserModal key={"user-modal"} title={title} onClose={hideModal} />
+          )}
+        </AnimatePresence>
         <Container>
           <h2>My Profile</h2>
           <div className={styles.container}>
@@ -107,7 +108,7 @@ const Profile = () => {
             </div>
           </div>
         </Container>
-      </main>
+      </ProtectedLayout>
     </>
   );
 };
