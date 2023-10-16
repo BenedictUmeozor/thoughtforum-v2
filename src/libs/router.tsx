@@ -26,6 +26,7 @@ const router = createBrowserRouter(
           <RootLayout />
         </Suspense>
       }
+      errorElement={<ErrorPage />}
     >
       <Route index element={<Home />} />
       <Route path="register" element={<Register />} />
