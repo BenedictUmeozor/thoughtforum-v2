@@ -12,6 +12,13 @@
     }
   }
 
+  small {
+    display: block;
+    text-align: center;
+    margin: 0.75rem 0;
+    color: crimson;
+  }
+
   .title {
     font-size: 1rem;
     font-family: "Poppins", sans-serif;
@@ -25,6 +32,13 @@
     font-size: 0.9rem;
   }
 
+  .line {
+    height: 0.15rem;
+    border-radius: 0.1rem;
+    width: 100%;
+    background-color: #ddd;
+  }
+
   button {
     height: 50px;
     margin-top: 1rem;
@@ -35,9 +49,7 @@
     border: 0.15rem solid transparent;
 
     &:hover {
-      background-color: transparent;
-      color: var(--main);
-      border-color: var(--main);
+      background-color: darken($color: #18298d, $amount: 15);
     }
   }
 

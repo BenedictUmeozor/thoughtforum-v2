@@ -70,6 +70,33 @@
   }
 }
 
+.newDiv {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  z-index: 9999999;
+  position: fixed;
+  top: 20%;
+  left: 0;
+
+  .new {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    column-gap: 0.25rem;
+    background-color: var(--main);
+    border: 0.15rem solid var(--main);
+    padding: 0.5rem 1rem;
+    color: var(--primary);
+    border-radius: 1rem;
+
+    p {
+      font-family: "Poppins", sans-serif;
+      font-size: 0.95rem;
+    }
+  }
+}
 .questionBox {
   margin-top: 0.5rem;
 

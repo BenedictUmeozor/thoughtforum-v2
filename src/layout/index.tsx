@@ -133,7 +133,9 @@ const RootLayout = () => {
         </section>
         <Footer />
       </main>
-      <Toaster toastOptions={{ style: { width: "100%" } }} />
+      <Toaster
+        toastOptions={{ style: { width: "100%", zIndex: 999999999999999 } }}
+      />
     </>
   );
 };

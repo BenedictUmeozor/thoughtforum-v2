@@ -71,7 +71,7 @@ const TopMembers = () => {
                   ))
                 ) : (
                   <>
-                    <p>No members to show</p>
+                    <p className="center-text">No members to show</p>
                   </>
                 )}
               </>

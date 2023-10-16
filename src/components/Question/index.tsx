@@ -8,7 +8,7 @@ import {
   Trash2,
   Edit2,
 } from "react-feather";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Avatar from "../Avatar";
 import { setFixedBody } from "../../utils";
 import { AnimatePresence } from "framer-motion";
@@ -34,6 +34,11 @@ const Question = ({ question }: { question: QuestionType }) => {
     "post"
   );
   const { fetchData } = useAxiosInstance("/questions");
+  const {
+    fetchData: deleteQuestion,
+    isLoading: deleteLoading,
+    error: deleteError,
+  } = useAxiosAuth("/questions/" + question._id, "delete");
   const socket = useSocket();
 
   const likeQuestion = async () => {
@@ -41,9 +46,9 @@ const Question = ({ question }: { question: QuestionType }) => {
       toast.error("You need to be logged in");
       return;
     }
-    const data = await likeFetch();
-    if (data) {
-      if (question._id !== _id) {
+    const promise = await likeFetch();
+    if (promise) {
+      if (question.user._id !== _id) {
         if (!question.likes.includes(_id)) {
           socket?.emit("like", {
             _id: question.user._id,
@@ -54,6 +59,21 @@ const Question = ({ question }: { question: QuestionType }) => {
       }
       const questions = await fetchData();
       dispatch(setQuestions(questions));
+    }
+  };
+
+  const onDelete = async () => {
+    if (!_id) {
+      toast.error("You need to be logged in");
+      return;
+    }
+
+    const promise = await deleteQuestion();
+
+    if (promise) {
+      const questions = await fetchData();
+      dispatch(setQuestions(questions));
+      toast.success("Your question was deleted");
     }
   };
 
@@ -79,13 +99,27 @@ const Question = ({ question }: { question: QuestionType }) => {
     setFixedBody(false);
   };
 
+  useEffect(() => {
+    if (deleteError) {
+      toast.error("Something went wrong");
+    }
+  }, [deleteError, deleteLoading]);
+
   return (
     <>
       <AnimatePresence>
-        {showForm && <EditQuestionForm onClick={hideForm} />}
+        {showForm && (
+          <EditQuestionForm
+            question={question}
+            key={"edit-question-form"}
+            onClick={hideForm}
+          />
+        )}
       </AnimatePresence>
       <AnimatePresence>
-        {showLikes && <LikesModal onClose={hideLikes} />}
+        {showLikes && (
+          <LikesModal key={"like-modal-form"} onClose={hideLikes} />
+        )}
       </AnimatePresence>
       <div className={styles.question}>
         <header>
@@ -105,7 +139,13 @@ const Question = ({ question }: { question: QuestionType }) => {
                 <div onClick={displayForm}>
                   Edit <Edit2 />
                 </div>
-                <div>
+                <div
+                  onClick={onDelete}
+                  style={{
+                    opacity: deleteLoading ? 0.5 : 1,
+                    pointerEvents: deleteLoading ? "none" : "all",
+                  }}
+                >
                   Delete <Trash2 />
                 </div>
               </div>

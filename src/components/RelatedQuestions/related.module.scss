@@ -1,4 +1,9 @@
 .div {
+  a {
+    &:hover {
+      text-decoration: underline;
+    }
+  }
   .title {
     font-size: 1rem;
     display: flex;

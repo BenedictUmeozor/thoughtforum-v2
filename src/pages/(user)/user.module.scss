@@ -78,6 +78,7 @@
 
       svg {
         color: var(--main);
+        cursor: pointer;
 
         &:last-child {
           color: var(--secondary);

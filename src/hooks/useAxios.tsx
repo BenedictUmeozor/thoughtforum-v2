@@ -80,7 +80,11 @@ export const useAxiosAuth = <T,>(
       }
 
       if (method === "put") {
-        response = await axiosAuth.put(endpoint);
+        if (payload) {
+          response = await axiosAuth.put(endpoint, payload);
+        } else {
+          response = await axiosAuth.put(endpoint);
+        }
         return response.data;
       }
 

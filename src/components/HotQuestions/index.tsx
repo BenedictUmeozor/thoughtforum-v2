@@ -61,7 +61,7 @@ const HotQuestions = () => {
                     ))
                   ) : (
                     <>
-                      <p>No questions to show</p>
+                      <p className="center-text">No questions to show</p>
                     </>
                   )}
                 </>

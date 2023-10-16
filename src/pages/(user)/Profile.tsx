@@ -4,16 +4,24 @@ import styles from "./user.module.scss";
 import Question from "./Question";
 import Box from "./Box";
 import { AnimatePresence } from "framer-motion";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { setFixedBody } from "../../utils";
 import EditProfileForm from "../../components/Forms/EditProfileForm";
 import UserModal from "../../components/UserModal";
 import ProtectedLayout from "../../layout/ProtectedLayout";
+import { useAppSelector } from "../../hooks";
+import { Skeleton } from "@mui/material";
+import UserAvatar from "./UserAvatar";
+import { Question as QuestionType } from "../../helpers/types";
+import { axiosInstance } from "../../libs/axios";
+// import { format } from "date-fns";
 
 const Profile = () => {
   const [showForm, setShowForm] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [title, setTitle] = useState("Followers");
+  const [questions, setQuestions] = useState<QuestionType[] | null>(null);
+  const user = useAppSelector((state) => state.user);
 
   const displayForm = () => {
     setShowForm(true);
@@ -42,6 +50,29 @@ const Profile = () => {
     setFixedBody(false);
   };
 
+  const getQuestions = async () => {
+    if (user?.questions) {
+      const questionPromises = user.questions.map(async (question) => {
+        const response = await axiosInstance.get("/questions/" + question);
+        return response.data;
+      });
+
+      const questions = await Promise.all(questionPromises);
+      setQuestions(questions.reverse());
+
+      return questions;
+    }
+
+    setQuestions([]);
+    return [];
+  };
+
+  useEffect(() => {
+    if (user) {
+      getQuestions();
+    }
+  }, [user]);
+
   return (
     <>
       <ProtectedLayout className={styles.main}>
@@ -57,52 +88,99 @@ const Profile = () => {
           <h2>My Profile</h2>
           <div className={styles.container}>
             <div className={styles.left}>
-              <Box>
-                <div className={styles.user}>
-                  <div className={styles.flex}>
-                    <div className={styles.avatar}>B</div>
-                    <button className={styles.edit} onClick={displayForm}>
-                      Edit <Edit2 />
-                    </button>
-                  </div>
-                  <div className={styles.socials}>
-                    <p onClick={showFollowers}>
-                      <span>4 </span>followers
+              {user ? (
+                <Box>
+                  <div className={styles.user}>
+                    <div className={styles.flex}>
+                      <UserAvatar className={styles.avatar} name={user.name} />
+                      <button className={styles.edit} onClick={displayForm}>
+                        Edit <Edit2 />
+                      </button>
+                    </div>
+                    <div className={styles.socials}>
+                      <p onClick={showFollowers}>
+                        <span>{user.followers.length} </span>followers
+                      </p>
+                      <p onClick={showFollowing}>
+                        <span>{user.following.length} </span>following
+                      </p>
+                    </div>
+                    <p className={styles.joined}>
+                      {/* Joined: {format(new Date(user.createdAt))} */}
                     </p>
-                    <p onClick={showFollowing}>
-                      <span>4 </span>following
-                    </p>
                   </div>
-                  <p className={styles.joined}>Joined: 11th October, 2023</p>
-                </div>
-              </Box>
-              <Box>
-                <h3>Personal Information</h3>
-                <div className={styles.detail}>
-                  <p>Name:</p>
-                  <p>Benedict</p>
-                </div>
-                <div className={styles.detail}>
-                  <p>Bio:</p>
-                  <p>Benedict</p>
-                </div>
-                <div className={styles.detail}>
-                  <p>Email:</p>
-                  <p>Benedict</p>
-                </div>
-                <div className={styles.detail}>
-                  <p>Gender:</p>
-                  <p>Benedict</p>
-                </div>
-              </Box>
+                </Box>
+              ) : (
+                <Skeleton
+                  variant="rectangular"
+                  width={"100%"}
+                  height={250}
+                  style={{ marginBottom: "1rem" }}
+                />
+              )}
+              {user ? (
+                <Box>
+                  <h3>Personal Information</h3>
+                  <div className={styles.detail}>
+                    <p>Name:</p>
+                    <p>{user.name}</p>
+                  </div>
+                  <div className={styles.detail}>
+                    <p>Bio:</p>
+                    <p>{user.bio}</p>
+                  </div>
+                  <div className={styles.detail}>
+                    <p>Email:</p>
+                    <p>{user.email}</p>
+                  </div>
+                  <div className={styles.detail}>
+                    <p>Gender:</p>
+                    <p>{user.gender}</p>
+                  </div>
+                </Box>
+              ) : (
+                <Skeleton
+                  variant="rectangular"
+                  width={"100%"}
+                  height={250}
+                  style={{ marginBottom: "1rem" }}
+                />
+              )}
             </div>
             <div className={styles.right}>
               <Box>
                 <h3>Questions</h3>
                 <div className={styles.questions}>
-                  <Question />
-                  <Question />
-                  <Question />
+                  {questions ? (
+                    questions.map((question) => (
+                      <Question
+                        key={question._id}
+                        question={question}
+                        getQuestions={getQuestions}
+                      />
+                    ))
+                  ) : (
+                    <>
+                      <Skeleton
+                        variant="rectangular"
+                        width={"100%"}
+                        height={200}
+                        style={{ marginBottom: "1rem" }}
+                      />
+                      <Skeleton
+                        variant="rectangular"
+                        width={"100%"}
+                        height={200}
+                        style={{ marginBottom: "1rem" }}
+                      />
+                      <Skeleton
+                        variant="rectangular"
+                        width={"100%"}
+                        height={200}
+                        style={{ marginBottom: "1rem" }}
+                      />
+                    </>
+                  )}
                 </div>
               </Box>
             </div>

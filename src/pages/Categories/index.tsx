@@ -8,17 +8,19 @@ import DesktopDiv from "../../layout/DesktopDiv";
 import MobileDiv from "../../layout/MobileDiv";
 import QuestionBox from "../Home/QuestionBox";
 import styles from "./categories.module.scss";
-import { useAppSelector } from "../../hooks";
+import { useAppDispatch, useAppSelector } from "../../hooks";
 import { useAxiosInstance } from "../../hooks/useAxios";
 import toast from "react-hot-toast";
-import { Category, Question as QuestionType } from "../../helpers/types";
+import { Category } from "../../helpers/types";
 import { Skeleton } from "@mui/material";
+import { setQuestions } from "../../features/QuestionSlice";
 
 const Categories = () => {
   const { id } = useParams();
   const categories = useAppSelector((state) => state.categories);
   const [category, setCategory] = useState<Category | null>(null);
-  const [questions, setQuestions] = useState<QuestionType[] | null>(null);
+  const questions = useAppSelector((state) => state.questions);
+  const dispatch = useAppDispatch();
 
   const { isLoading, error, fetchData } = useAxiosInstance(
     "/questions/category/" + id
@@ -36,7 +38,7 @@ const Categories = () => {
   useEffect(() => {
     const setData = async () => {
       const data = await fetchData();
-      setQuestions(data);
+      dispatch(setQuestions(data));
       setCategory(categories.find((c) => c._id === id)!);
     };
     setData();
@@ -64,7 +66,7 @@ const Categories = () => {
             <h3 className={styles.title}>{category?.title}</h3>
 
             <div className={styles.questions}>
-              {isLoading ? (
+              {!questions.length && isLoading ? (
                 <>
                   <Skeleton
                     variant="rectangular"

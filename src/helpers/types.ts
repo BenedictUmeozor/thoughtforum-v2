@@ -49,6 +49,20 @@ export type Question = {
   __v: number;
 };
 
+export type Answer = {
+  _id: string;
+  text: string;
+  user: {
+    _id: string;
+    name: string;
+  };
+  likes: string[];
+  question: string;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+}
+
 export type UserProfile = {
   _id: string;
   name: string;
@@ -71,17 +85,6 @@ export type ModalUser = {
   questions: string[];
   followers: string[];
   following: string[];
-};
-
-export type Snackbar = {
-  success: boolean;
-  successMessage: string;
-  error: boolean;
-  errorMessage: string;
-  info: boolean;
-  infoMessage: string;
-  warning: boolean;
-  warningMessage: string;
 };
 
 export type RelatedQuestion = {
