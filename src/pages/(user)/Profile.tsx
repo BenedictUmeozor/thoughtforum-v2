@@ -155,6 +155,7 @@ const Profile = () => {
                     questions.map((question) => (
                       <Question
                         key={question._id}
+                        id={user._id}
                         question={question}
                         getQuestions={getQuestions}
                       />

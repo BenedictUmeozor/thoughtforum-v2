@@ -6,14 +6,17 @@ import { AnimatePresence } from "framer-motion";
 import { setFixedBody } from "../../utils";
 import EditQuestionForm from "../../components/Forms/EditQuestionForm";
 import { Question as QuestionType } from "../../helpers/types";
+import { useAppSelector } from "../../hooks";
 
 type PropTypes = {
+  id?: string;
   question: QuestionType;
   getQuestions: () => void;
 };
 
 const Question = ({ question, getQuestions }: PropTypes) => {
   const [showForm, setShowForm] = useState(false);
+  const { _id } = useAppSelector((state) => state.auth);
 
   const displayForm = () => {
     setShowForm(true);
@@ -45,9 +48,11 @@ const Question = ({ question, getQuestions }: PropTypes) => {
           <div className={styles.answer}>
             <MessageSquare /> {question.answers.length} answers
           </div>
-          <div className={styles.action}>
-            <Edit2 onClick={displayForm} />
-          </div>
+          {_id && _id === question.user._id && (
+            <div className={styles.action}>
+              <Edit2 onClick={displayForm} />
+            </div>
+          )}
         </footer>
       </div>
     </>
