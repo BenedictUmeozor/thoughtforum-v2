@@ -92,7 +92,7 @@ const Profile = () => {
                 <Box>
                   <div className={styles.user}>
                     <div className={styles.flex}>
-                      <UserAvatar className={styles.avatar} name={user.name} />
+                      <UserAvatar className={styles.avatar} name={user?.name} />
                       <button className={styles.edit} onClick={displayForm}>
                         Edit <Edit2 />
                       </button>
