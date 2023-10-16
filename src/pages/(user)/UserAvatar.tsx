@@ -4,7 +4,7 @@ type PropTypes = {
 };
 
 const UserAvatar = ({ name, className }: PropTypes) => {
-  const letter = name[0].toUpperCase();
+  const letter = name[0]?.toUpperCase();
 
   return <div className={className}>{letter}</div>;
 };
