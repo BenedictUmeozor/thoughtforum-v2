@@ -9,19 +9,23 @@ import { setFixedBody } from "../../utils";
 import EditProfileForm from "../../components/Forms/EditProfileForm";
 import UserModal from "../../components/UserModal";
 import ProtectedLayout from "../../layout/ProtectedLayout";
-import { useAppSelector } from "../../hooks";
 import { Skeleton } from "@mui/material";
 import UserAvatar from "./UserAvatar";
-import { Question as QuestionType } from "../../helpers/types";
+import { Question as QuestionType, UserProfile } from "../../helpers/types";
 import { axiosInstance } from "../../libs/axios";
-// import { format } from "date-fns";
+import { useAxiosAuth } from "../../hooks/useAxios";
+import { useNavigate } from "react-router-dom";
+import { formatRFC7231 } from "date-fns";
 
 const Profile = () => {
   const [showForm, setShowForm] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [user, setUser] = useState<UserProfile | null>(null);
   const [title, setTitle] = useState("Followers");
   const [questions, setQuestions] = useState<QuestionType[] | null>(null);
-  const user = useAppSelector((state) => state.user);
+  const navigate = useNavigate();
+
+  const { fetchData: getUser, error } = useAxiosAuth("/users");
 
   const displayForm = () => {
     setShowForm(true);
@@ -67,18 +71,33 @@ const Profile = () => {
     return [];
   };
 
+  const fetchUser = async () => {
+    const user: UserProfile = await getUser();
+    setUser(user);
+  };
+
   useEffect(() => {
     if (user) {
       getQuestions();
     }
   }, [user]);
 
+  useEffect(() => {
+    fetchUser();
+  }, []);
+
+  useEffect(() => {
+    if (error) {
+      navigate("/error-page");
+    }
+  }, [error]);
+
   return (
     <>
       <ProtectedLayout className={styles.main}>
         <AnimatePresence>
           {showForm && (
-            <EditProfileForm key={"edit-profile"} onClick={hideForm} />
+            <EditProfileForm key={"edit-profile"} setUser={setUser} onClick={hideForm} />
           )}
           {showModal && (
             <UserModal key={"user-modal"} title={title} onClose={hideModal} />
@@ -106,7 +125,7 @@ const Profile = () => {
                       </p>
                     </div>
                     <p className={styles.joined}>
-                      {/* Joined: {format(new Date(user.createdAt))} */}
+                      Joined:  {formatRFC7231(new Date(user.createdAt))}
                     </p>
                   </div>
                 </Box>
@@ -155,7 +174,7 @@ const Profile = () => {
                     questions.map((question) => (
                       <Question
                         key={question._id}
-                        id={user._id}
+                        id={user?._id}
                         question={question}
                         getQuestions={getQuestions}
                       />

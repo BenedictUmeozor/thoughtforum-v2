@@ -12,7 +12,7 @@ import { getTheme } from "../utils";
 import Loader from "./Loader";
 import Footer from "../components/Footer";
 import { Toaster } from "react-hot-toast";
-import { axiosAuth } from "../libs/axios";
+import { axiosAuth, axiosInstance } from "../libs/axios";
 import { useAuthRefresh } from "../hooks/useAuthRefresh";
 import toast from "react-hot-toast";
 import jwt_decode from "jwt-decode";
@@ -93,6 +93,11 @@ const RootLayout = () => {
 
       if (expirationTime * 1000 < Date.now()) {
         const data: Auth = await getData();
+        if (!data) {
+          dispatch(deleteCredentials())
+          navigate("/login")
+          toast.error("Session expired. Login again")
+        }
         dispatch(setCredentials(data));
 
         config.headers.Authorization = JSON.parse(
@@ -111,13 +116,28 @@ const RootLayout = () => {
 
   axiosAuth.interceptors.response.use(
     (response) => {
-      if (response.status === 401) {
-        dispatch(deleteCredentials());
-        navigate("/login");
-      }
       return response;
     },
     (error) => {
+      if (error.response && error.response.status === 401) {
+        dispatch(deleteCredentials());
+        toast.error("Session expired. Login again");
+        navigate("/login");
+      }
+      return Promise.reject(error);
+    }
+  );
+
+  axiosInstance.interceptors.response.use(
+    (response) => {
+      return response;
+    },
+    (error) => {
+      if (error.response && error.response.status === 401) {
+        dispatch(deleteCredentials());
+        toast.error("Session expired. Login again");
+        navigate("/login");
+      }
       return Promise.reject(error);
     }
   );

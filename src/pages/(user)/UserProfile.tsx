@@ -18,6 +18,7 @@ import { Skeleton } from "@mui/material";
 import { axiosInstance } from "../../libs/axios";
 import UserAvatar from "./UserAvatar";
 import toast from "react-hot-toast";
+import { formatRFC7231 } from "date-fns";
 
 const UserProfile = () => {
   const [showModal, setShowModal] = useState(false);
@@ -111,11 +112,8 @@ const UserProfile = () => {
     if (_id && _id === id) {
       navigate("/profile");
     }
-  }, [id, _id]);
-
-  useEffect(() => {
     fetchUser();
-  }, [id]);
+  }, [id, _id]);
 
   return (
     <>
@@ -148,7 +146,9 @@ const UserProfile = () => {
                         <span>{user.following.length} </span>following
                       </p>
                     </div>
-                    {/* <p className={styles.joined}>Joined: 11th October, 2023</p> */}
+                    <p className={styles.joined}>
+                      Joined: {formatRFC7231(new Date(user.createdAt))}
+                    </p>
                   </div>
                 </Box>
               ) : (

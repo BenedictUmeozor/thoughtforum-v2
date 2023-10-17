@@ -1,19 +1,27 @@
 import { X } from "react-feather";
-import { useState, useEffect, FormEvent } from "react";
+import {
+  useState,
+  useEffect,
+  FormEvent,
+  Dispatch,
+  SetStateAction,
+} from "react";
 import Modal from "../../layout/Modal";
 import styles from "./forms.module.scss";
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { useAxiosAuth } from "../../hooks/useAxios";
 import Loading from "../../layout/Backdrop";
 import toast from "react-hot-toast";
-import { setUser } from "../../features/UserSlice";
+import { setUser as _setUser } from "../../features/UserSlice";
 import { axiosAuth } from "../../libs/axios";
+import { UserProfile } from "../../helpers/types";
 
 type PropTypes = {
   onClick: () => void;
+  setUser: Dispatch<SetStateAction<UserProfile | null>>;
 };
 
-const EditProfileForm = ({ onClick }: PropTypes) => {
+const EditProfileForm = ({ onClick, setUser }: PropTypes) => {
   const user = useAppSelector((state) => state.user);
   const [formData, setFormData] = useState({
     name: user.name,
@@ -24,7 +32,8 @@ const EditProfileForm = ({ onClick }: PropTypes) => {
 
   const getUser = async () => {
     const { data } = await axiosAuth.get("/users");
-    dispatch(setUser(data));
+    dispatch(_setUser(data));
+    setUser(data);
   };
 
   const {
