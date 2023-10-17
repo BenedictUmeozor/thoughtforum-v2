@@ -12,7 +12,7 @@ import { getTheme } from "../utils";
 import Loader from "./Loader";
 import Footer from "../components/Footer";
 import { Toaster } from "react-hot-toast";
-import { axiosAuth, axiosInstance } from "../libs/axios";
+import { axiosAuth } from "../libs/axios";
 import { useAuthRefresh } from "../hooks/useAuthRefresh";
 import toast from "react-hot-toast";
 import jwt_decode from "jwt-decode";
@@ -128,19 +128,19 @@ const RootLayout = () => {
     }
   );
 
-  axiosInstance.interceptors.response.use(
-    (response) => {
-      return response;
-    },
-    (error) => {
-      if (error.response && error.response.status === 401) {
-        dispatch(deleteCredentials());
-        toast.error("Session expired. Login again");
-        navigate("/login");
-      }
-      return Promise.reject(error);
-    }
-  );
+  // axiosInstance.interceptors.response.use(
+  //   (response) => {
+  //     return response;
+  //   },
+  //   (error) => {
+  //     if (error.response && error.response.status === 401) {
+  //       dispatch(deleteCredentials());
+  //       toast.error("Session expired. Login again");
+  //       navigate("/login");
+  //     }
+  //     return Promise.reject(error);
+  //   }
+  // );
 
   return (
     <>

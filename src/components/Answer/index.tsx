@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { SetStateAction, useState } from "react";
+import { SetStateAction, useState, useEffect } from "react";
 import Avatar from "../Avatar";
 import styles from "./answer.module.scss";
 import { Edit2, Heart, MoreVertical, Trash2 } from "react-feather";
@@ -15,10 +15,11 @@ import toast from "react-hot-toast";
 type PropTypes = {
   answer: AnswerType;
   id: string;
+  refetch: () => void;
   setAnswers: (value: SetStateAction<AnswerType[] | null>) => void;
 };
 
-const Answer = ({ answer, id, setAnswers }: PropTypes) => {
+const Answer = ({ answer, id, setAnswers, refetch }: PropTypes) => {
   const [showMenu, setShowMenu] = useState(false);
   const [showForm, setShowForm] = useState(false);
   const { _id } = useAppSelector((state) => state.auth);
@@ -29,6 +30,12 @@ const Answer = ({ answer, id, setAnswers }: PropTypes) => {
     error: likeError,
   } = useAxiosAuth("/answers/" + answer._id, "post");
   const { fetchData: getAnswers } = useAxiosInstance("/answers/" + id);
+
+  const {
+    isLoading: deleteLoading,
+    error: deleteError,
+    fetchData: deleteAnswer,
+  } = useAxiosAuth("/answers/" + answer._id, "delete");
 
   const fetchAnswers = async () => {
     const answers: AnswerType[] = await getAnswers();
@@ -45,9 +52,18 @@ const Answer = ({ answer, id, setAnswers }: PropTypes) => {
     if (promise) {
       await fetchAnswers();
     }
+  };
 
-    if (likeError) {
-      toast.error("Something went wrong");
+  const onDelete = async () => {
+    if (!_id) {
+      toast.error("You need to be logged in");
+      return;
+    }
+    const promise = await deleteAnswer();
+
+    if (promise) {
+      await refetch();
+      toast.success("Answer deleted");
     }
   };
 
@@ -63,10 +79,22 @@ const Answer = ({ answer, id, setAnswers }: PropTypes) => {
     setFixedBody(false);
   };
 
+  useEffect(() => {
+    if (likeError || deleteError) {
+      toast.error("Something went wrong");
+    }
+  }, [likeError, deleteError]);
+
   return (
     <>
       <AnimatePresence>
-        {showForm && <EditAnswerForm onClick={hideForm} />}
+        {showForm && (
+          <EditAnswerForm
+            answer={answer}
+            onEdit={fetchAnswers}
+            onClick={hideForm}
+          />
+        )}
       </AnimatePresence>
       <div className={styles.answer}>
         <header>
@@ -76,22 +104,30 @@ const Answer = ({ answer, id, setAnswers }: PropTypes) => {
               <h3>{answer.user.name}</h3>
             </Link>
           </div>
-          <div
-            className={styles.ellipsis}
-            onClick={() => setShowMenu((prev) => !prev)}
-          >
-            <MoreVertical />
-            {showMenu && (
-              <div className={styles.div}>
-                <div onClick={displayForm}>
-                  Edit <Edit2 />
+          {_id && answer.user._id === _id && (
+            <div
+              className={styles.ellipsis}
+              onClick={() => setShowMenu((prev) => !prev)}
+            >
+              <MoreVertical />
+              {showMenu && (
+                <div className={styles.div}>
+                  <div onClick={displayForm}>
+                    Edit <Edit2 />
+                  </div>
+                  <div
+                    onClick={onDelete}
+                    style={{
+                      opacity: deleteLoading ? 0.5 : 1,
+                      pointerEvents: deleteLoading ? "none" : "all",
+                    }}
+                  >
+                    Delete <Trash2 />
+                  </div>
                 </div>
-                <div>
-                  Delete <Trash2 />
-                </div>
-              </div>
-            )}
-          </div>
+              )}
+            </div>
+          )}
         </header>
         <div className={styles.body}>
           <p>{answer.text}</p>

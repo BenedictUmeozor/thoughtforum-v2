@@ -176,6 +176,26 @@
           background-color: transparent;
         }
       }
+
+      small {
+        display: inline-block;
+        margin-top: 0.5rem;
+
+        a {
+          color: var(--main);
+          text-decoration: underline;
+        }
+      }
+    }
+
+    .answers_grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem 0.5rem;
+
+      @include mobile {
+        grid-template-columns: 1fr;
+      }
     }
 
     // @keyframes scale {

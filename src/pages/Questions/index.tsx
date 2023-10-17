@@ -71,6 +71,13 @@ const Questions = () => {
     }
   };
 
+  const getData = async () => {
+    const question: Question = await getQuestion();
+    const answers: AnswerType[] = await getAnswers();
+    setQuestion(question);
+    setAnswers(answers);
+  };
+
   const onFollow = async () => {
     if (!userId) {
       toast.error("You need to be logged in");
@@ -141,12 +148,6 @@ const Questions = () => {
   };
 
   useEffect(() => {
-    const getData = async () => {
-      const question: Question = await getQuestion();
-      const answers: AnswerType[] = await getAnswers();
-      setQuestion(question);
-      setAnswers(answers);
-    };
     getData();
   }, []);
 
@@ -156,10 +157,23 @@ const Questions = () => {
     }
   }, [deleteError, deleteLoading]);
 
+  useEffect(() => {
+    socket?.on("answerCreated", async () => {
+      await getData();
+    });
+  }, [socket]);
+
   return (
     <>
       <AnimatePresence>
-        {showAddForm && <AddAnswerForm onClick={hideForm} />}
+        {showAddForm && question && (
+          <AddAnswerForm
+            onAdd={getData}
+            onClick={hideForm}
+            user_id={question.user._id}
+            question={question._id}
+          />
+        )}
       </AnimatePresence>
       <AnimatePresence>
         {showForm && (
@@ -260,11 +274,18 @@ const Questions = () => {
                         <p>{question.answers.length}</p>
                       </div>
                     </div>
-                    <button className={styles.answer} onClick={displayForm}>
-                      <MessageCircle />
-                      Answer
-                    </button>
+                    {userId && (
+                      <button className={styles.answer} onClick={displayForm}>
+                        <MessageCircle />
+                        Answer
+                      </button>
+                    )}
                   </footer>
+                  {!userId && (
+                    <small>
+                      <Link to="/login">Login</Link> to answer this question
+                    </small>
+                  )}
                 </div>
               </>
             ) : (
@@ -288,14 +309,17 @@ const Questions = () => {
                 !answers.length ? (
                   <p className="center-text">No answers to show</p>
                 ) : (
-                  answers.map((answer) => (
-                    <Answer
-                      key={answer._id}
-                      answer={answer}
-                      id={id!}
-                      setAnswers={setAnswers}
-                    />
-                  ))
+                  <div className={styles.answers_grid}>
+                    {answers.map((answer) => (
+                      <Answer
+                        key={answer._id}
+                        answer={answer}
+                        refetch={getData}
+                        id={id!}
+                        setAnswers={setAnswers}
+                      />
+                    ))}
+                  </div>
                 )
               ) : (
                 <>
