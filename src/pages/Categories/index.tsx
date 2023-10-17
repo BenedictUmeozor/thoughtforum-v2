@@ -8,23 +8,21 @@ import DesktopDiv from "../../layout/DesktopDiv";
 import MobileDiv from "../../layout/MobileDiv";
 import QuestionBox from "../Home/QuestionBox";
 import styles from "./categories.module.scss";
-import { useAppDispatch, useAppSelector } from "../../hooks";
+import { useAppSelector } from "../../hooks";
 import { useAxiosInstance } from "../../hooks/useAxios";
 import toast from "react-hot-toast";
-import { Category } from "../../helpers/types";
+import { Category, Question as QuestionType } from "../../helpers/types";
 import { Skeleton } from "@mui/material";
-import { setQuestions } from "../../features/QuestionSlice";
 
 const Categories = () => {
   const { id } = useParams();
   const categories = useAppSelector((state) => state.categories);
   const [category, setCategory] = useState<Category | null>(null);
-  const questions = useAppSelector((state) => state.questions);
-  const dispatch = useAppDispatch();
+  const [categoryQuestions, setCategoryQuestions] = useState<
+    QuestionType[] | null
+  >(null);
 
-  const { isLoading, error, fetchData } = useAxiosInstance(
-    "/questions/category/" + id
-  );
+  const { error, fetchData } = useAxiosInstance("/questions/category/" + id);
 
   const navigate = useNavigate();
 
@@ -38,7 +36,7 @@ const Categories = () => {
   useEffect(() => {
     const setData = async () => {
       const data = await fetchData();
-      dispatch(setQuestions(data));
+      setCategoryQuestions(data);
       setCategory(categories.find((c) => c._id === id)!);
     };
     setData();
@@ -66,7 +64,7 @@ const Categories = () => {
             <h3 className={styles.title}>{category?.title}</h3>
 
             <div className={styles.questions}>
-              {!questions.length && isLoading ? (
+              {!categoryQuestions ? (
                 <>
                   <Skeleton
                     variant="rectangular"
@@ -93,9 +91,9 @@ const Categories = () => {
                     style={{ marginBottom: "1rem" }}
                   />
                 </>
-              ) : questions?.length ? (
+              ) : categoryQuestions?.length ? (
                 <>
-                  {questions?.map((question) => (
+                  {categoryQuestions?.map((question) => (
                     <Question key={question._id} question={question} />
                   ))}
                 </>
