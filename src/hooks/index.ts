@@ -4,6 +4,7 @@ import { AppDispatch, RootState } from "../store/store";
 import { useDispatch, useSelector, TypedUseSelectorHook } from "react-redux";
 import { SocketContext } from "../context/socket";
 import { Socket } from "socket.io-client";
+import { QuestionContext } from "../context/question";
 
 export const useThemeContext = () => {
   return useContext(ThemeContext);
@@ -15,4 +16,8 @@ export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 
 export const useSocket = (): Socket | null => {
   return useContext(SocketContext);
+};
+
+export const useQuestionContext = () => {
+  return useContext(QuestionContext);
 };

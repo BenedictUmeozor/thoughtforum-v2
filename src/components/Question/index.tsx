@@ -16,24 +16,23 @@ import EditQuestionForm from "../Forms/EditQuestionForm";
 import LikesModal from "../UserModal/LikesModal";
 import { Question as QuestionType } from "../../helpers/types";
 import { formatRFC7231 } from "date-fns";
-import { useAppDispatch, useAppSelector, useSocket } from "../../hooks";
-import { useAxiosAuth, useAxiosInstance } from "../../hooks/useAxios";
+import { useAppSelector, useQuestionContext, useSocket } from "../../hooks";
+import { useAxiosAuth } from "../../hooks/useAxios";
 import toast from "react-hot-toast";
-import { setQuestions } from "../../features/QuestionSlice";
 
 const Question = ({ question }: { question: QuestionType }) => {
   const { _id } = useAppSelector((state) => state.auth);
   const [showMenu, setShowMenu] = useState(false);
   const [showForm, setShowForm] = useState(false);
   const [showLikes, setShowLikes] = useState(false);
-  const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state.user);
+  const { setAppQuestions } = useQuestionContext();
 
   const { fetchData: likeFetch, isLoading: likeLoading } = useAxiosAuth(
     "/questions/like/" + question._id,
     "post"
   );
-  const { fetchData } = useAxiosInstance("/questions");
+
   const {
     fetchData: deleteQuestion,
     isLoading: deleteLoading,
@@ -57,8 +56,7 @@ const Question = ({ question }: { question: QuestionType }) => {
           });
         }
       }
-      const questions = await fetchData();
-      dispatch(setQuestions(questions));
+      await setAppQuestions();
     }
   };
 
@@ -71,8 +69,7 @@ const Question = ({ question }: { question: QuestionType }) => {
     const promise = await deleteQuestion();
 
     if (promise) {
-      const questions = await fetchData();
-      dispatch(setQuestions(questions));
+      await setAppQuestions();
       toast.success("Your question was deleted");
     }
   };

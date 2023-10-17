@@ -2,7 +2,7 @@ import { Search, Menu, X } from "react-feather";
 import Container from "../../layout/Container";
 import MobileDiv from "../../layout/MobileDiv";
 import styles from "./header.module.scss";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import DesktopNav from "../DesktopNav";
 import DesktopDiv from "../../layout/DesktopDiv";
 import { useEffect, useState } from "react";
@@ -14,6 +14,8 @@ import { setFixedBody } from "../../utils";
 const Header = () => {
   const [showNav, setShowNav] = useState(false);
   const [hasScrolled, setHasScrolled] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     setFixedBody(showNav);
@@ -58,7 +60,17 @@ const Header = () => {
           <DesktopNav />
           <DesktopDiv className={styles.search}>
             <Search />
-            <input type="text" placeholder="Enter a search" />
+            <input
+              type="text"
+              placeholder="Enter a search"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && searchTerm) {
+                  navigate("/search?search=" + searchTerm);
+                }
+              }}
+            />
           </DesktopDiv>
           <MobileDiv onClick={() => setShowNav((prev) => !prev)}>
             {showNav ? <X /> : <Menu />}

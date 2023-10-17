@@ -4,6 +4,7 @@ import styles from "./layout.module.scss";
 import {
   useAppDispatch,
   useAppSelector,
+  useQuestionContext,
   useSocket,
   useThemeContext,
 } from "../hooks";
@@ -25,6 +26,7 @@ import { setUser } from "../features/UserSlice";
 const RootLayout = () => {
   const { _setTheme } = useThemeContext();
   const { _id } = useAppSelector((state) => state.auth);
+  const { error: contextError } = useQuestionContext();
   const { getData, error } = useAuthRefresh();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -81,6 +83,13 @@ const RootLayout = () => {
     }
   }, [error, dispatch]);
 
+  useEffect(() => {
+    if (contextError) {
+      navigate("/error-page");
+      toast.error("Something went wrong");
+    }
+  }, [contextError]);
+
   axiosAuth.interceptors.request.use(
     async (config) => {
       const accessToken = JSON.parse(localStorage.getItem("accessToken")!);
@@ -94,9 +103,9 @@ const RootLayout = () => {
       if (expirationTime * 1000 < Date.now()) {
         const data: Auth = await getData();
         if (!data) {
-          dispatch(deleteCredentials())
-          navigate("/login")
-          toast.error("Session expired. Login again")
+          dispatch(deleteCredentials());
+          navigate("/login");
+          toast.error("Session expired. Login again");
         }
         dispatch(setCredentials(data));
 
