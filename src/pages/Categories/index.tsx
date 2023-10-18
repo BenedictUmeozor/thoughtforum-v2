@@ -14,7 +14,10 @@ import { Skeleton } from "@mui/material";
 const Categories = () => {
   const categories = useAppSelector((state) => state.categories);
   const questions = useAppSelector((state) => state.questions);
-  const [selected, setSelected] = useState(categories[0]?._id);
+  const [selected, setSelected] = useState(
+    categories && categories.length > 0 ? categories[0]._id : null
+  );
+
   const [category, setCategory] = useState<Category | null>(null);
   const [categoryQuestions, setCategoryQuestions] = useState<
     QuestionType[] | null
@@ -23,7 +26,9 @@ const Categories = () => {
   const filter = (param: string) => {
     setSelected(param);
     setCategoryQuestions(
-      [...questions].filter((question) => question.category._id === param)
+      [...questions].filter(
+        (question) => question.category && question.category._id === param
+      )
     );
     const category = categories.find((c) => c._id === param);
     if (category) {
@@ -65,7 +70,7 @@ const Categories = () => {
               ))}
           </div>
           <div className={styles.page}>
-            <h3 className={styles.title}>{category?.title}</h3>
+            {category && <h3 className={styles.title}>{category.title}</h3>}
 
             <div className={styles.questions}>
               {!categoryQuestions || !selected ? (
