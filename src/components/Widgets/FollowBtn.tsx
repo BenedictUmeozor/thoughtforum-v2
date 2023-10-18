@@ -3,7 +3,7 @@ import styles from "./widgets.module.scss";
 
 type PropTypes = {
   isFollowing?: boolean;
-  onFollow?: () => void;
+  onFollow?: () => Promise<void>;
   isLoading?: boolean;
 };
 
