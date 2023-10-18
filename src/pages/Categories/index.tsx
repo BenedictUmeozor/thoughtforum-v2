@@ -35,7 +35,7 @@ const Categories = () => {
     if (categories) {
       setSelected(categories[0]._id);
     }
-  }, []);
+  }, [categories]);
 
   useEffect(() => {
     if (questions && selected) {
@@ -53,15 +53,16 @@ const Categories = () => {
             <QuestionBox />
           </MobileDiv>
           <div className={styles.categories}>
-            {categories.map((category) => (
-              <button
-                key={category._id}
-                onClick={() => filter(category._id)}
-                className={selected === category._id ? styles.active : ""}
-              >
-                {category.title}
-              </button>
-            ))}
+            {categories &&
+              categories.map((category) => (
+                <button
+                  key={category._id}
+                  onClick={() => filter(category._id)}
+                  className={selected === category._id ? styles.active : ""}
+                >
+                  {category.title}
+                </button>
+              ))}
           </div>
           <div className={styles.page}>
             <h3 className={styles.title}>{category?.title}</h3>
@@ -94,9 +95,9 @@ const Categories = () => {
                     style={{ marginBottom: "1rem" }}
                   />
                 </>
-              ) : categoryQuestions?.length ? (
+              ) : categoryQuestions.length ? (
                 <>
-                  {categoryQuestions?.map((question) => (
+                  {categoryQuestions.map((question) => (
                     <Question key={question._id} question={question} />
                   ))}
                 </>
