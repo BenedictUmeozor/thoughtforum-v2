@@ -67,7 +67,7 @@ const User = ({ onClose, onFetch, title, user }: PropTypes) => {
         {title.toLowerCase() === "followers"
           ? user._id !== _id && (
               <FollowBtn
-                isFollowing={user.following.includes(_id!)}
+                isFollowing={user.followers.includes(_id!)}
                 isLoading={followLoading}
                 key={1}
                 onFollow={onFollow}
