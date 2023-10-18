@@ -1,4 +1,3 @@
-import { NavLink, useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import HotQuestions from "../../components/HotQuestions";
 import Question from "../../components/Question";
@@ -9,38 +8,42 @@ import MobileDiv from "../../layout/MobileDiv";
 import QuestionBox from "../Home/QuestionBox";
 import styles from "./categories.module.scss";
 import { useAppSelector } from "../../hooks";
-import { useAxiosInstance } from "../../hooks/useAxios";
-import toast from "react-hot-toast";
 import { Category, Question as QuestionType } from "../../helpers/types";
 import { Skeleton } from "@mui/material";
 
 const Categories = () => {
-  const { id } = useParams();
   const categories = useAppSelector((state) => state.categories);
+  const questions = useAppSelector((state) => state.questions);
+  const [selected, setSelected] = useState(categories[0]?._id);
   const [category, setCategory] = useState<Category | null>(null);
   const [categoryQuestions, setCategoryQuestions] = useState<
     QuestionType[] | null
   >(null);
 
-  const { error, fetchData } = useAxiosInstance("/questions/category/" + id);
-
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (error) {
-      toast.error("Something went wrong");
-      navigate("/error-page");
+  const filter = (param: string) => {
+    setSelected(param);
+    setCategoryQuestions(
+      [...questions].filter((question) => question.category._id === param)
+    );
+    const category = categories.find((c) => c._id === param);
+    if (category) {
+      setCategory(category);
     }
-  }, [error]);
+  };
 
   useEffect(() => {
-    const setData = async () => {
-      const data = await fetchData();
-      setCategoryQuestions(data);
-      setCategory(categories.find((c) => c._id === id)!);
-    };
-    setData();
-  }, [categories, id]);
+    if (categories) {
+      setSelected(categories[0]._id);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (questions && selected) {
+      setCategoryQuestions(
+        [...questions].filter((question) => question.category._id === selected)
+      );
+    }
+  }, [questions, selected]);
 
   return (
     <main className={styles.main}>
@@ -51,13 +54,13 @@ const Categories = () => {
           </MobileDiv>
           <div className={styles.categories}>
             {categories.map((category) => (
-              <NavLink
-                to={"/categories/" + category._id}
+              <button
                 key={category._id}
-                className={({ isActive }) => (isActive ? styles.active : "")}
+                onClick={() => filter(category._id)}
+                className={selected === category._id ? styles.active : ""}
               >
                 {category.title}
-              </NavLink>
+              </button>
             ))}
           </div>
           <div className={styles.page}>

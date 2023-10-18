@@ -11,7 +11,6 @@ import Logout from "../Logout";
 const MobileNav = ({ onClick }: FunctionProp) => {
   const { theme, _setTheme } = useThemeContext();
   const { refreshToken } = useAppSelector((state) => state.auth);
-  const categories = useAppSelector((state) => state.categories);
   const [showModal, setShowModal] = useState(false);
 
   const toggleTheme = () => {
@@ -57,7 +56,7 @@ const MobileNav = ({ onClick }: FunctionProp) => {
           </li>
           <li>
             <NavLink
-              to={"/categories/" + categories[0]?._id}
+              to={"/categories"}
               className={({ isActive }) => (isActive ? styles.active : "")}
               onClick={onClick}
             >

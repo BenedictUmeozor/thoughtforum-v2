@@ -10,7 +10,6 @@ import { setFixedBody } from "../../utils";
 const DesktopNav = () => {
   const { theme, _setTheme } = useThemeContext();
   const { refreshToken } = useAppSelector((state) => state.auth);
-  const categories = useAppSelector((state) => state.categories);
   const [showModal, setShowModal] = useState(false);
 
   const toggleTheme = () => {
@@ -48,7 +47,7 @@ const DesktopNav = () => {
           </li>
           <li>
             <NavLink
-              to={"/categories/" + categories[0]?._id}
+              to={"/categories"}
               className={({ isActive }) => (isActive ? styles.active : "")}
             >
               Categories

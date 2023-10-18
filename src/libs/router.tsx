@@ -34,7 +34,7 @@ const router = createBrowserRouter(
       <Route path="search" element={<SearchPage />} />
       <Route path="profile" element={<Profile />} />
       <Route path="questions/:id" element={<Questions />} />
-      <Route path="categories/:id" element={<Categories />} />
+      <Route path="categories" element={<Categories />} />
       <Route path="user/:id" element={<UserProfile />} />
       <Route path="*" element={<ErrorPage />} />
     </Route>
