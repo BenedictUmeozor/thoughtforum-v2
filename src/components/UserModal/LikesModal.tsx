@@ -1,7 +1,7 @@
 import { X } from "react-feather";
 import Modal from "../../layout/Modal";
 import styles from "./modal.module.scss";
-import User from "./User";
+// import User from "./User";
 
 type PropTypes = {
   id?: string | number;
@@ -18,10 +18,10 @@ const LikesModal = ({ onClose }: PropTypes) => {
         <p className={styles.title}>Likes</p>
 
         <div className={styles.users}>
+          {/* <User />
           <User />
           <User />
-          <User />
-          <User />
+          <User /> */}
         </div>
       </div>
     </Modal>
