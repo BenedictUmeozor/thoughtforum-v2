@@ -26,7 +26,7 @@ import { setUser } from "../features/UserSlice";
 const RootLayout = () => {
   const { _setTheme } = useThemeContext();
   const { _id } = useAppSelector((state) => state.auth);
-  const { error: contextError } = useQuestionContext();
+  const { error: contextError, setAppQuestions } = useQuestionContext();
   const { getData, error } = useAuthRefresh();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -89,6 +89,10 @@ const RootLayout = () => {
       toast.error("Something went wrong");
     }
   }, [contextError]);
+
+  useEffect(() => {
+    setAppQuestions();
+  }, []);
 
   axiosAuth.interceptors.request.use(
     async (config) => {

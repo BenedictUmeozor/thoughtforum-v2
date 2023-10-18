@@ -15,6 +15,7 @@ import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { ArrowUp } from "react-feather";
 import { AnimatePresence, motion } from "framer-motion";
+import { Question as QuestionType } from "../../helpers/types";
 
 const Home = () => {
   const [showBtn, setShowBtn] = useState(false);
@@ -22,11 +23,18 @@ const Home = () => {
   const { isLoading, fetchData, error } = useAxiosInstance("/questions");
   const questions = useAppSelector((state) => state.questions);
   const navigate = useNavigate();
+  const [pageQuestions, setPageQuestions] = useState<QuestionType[] | null>(
+    null
+  );
+  const { _id } = useAppSelector((state) => state.auth);
+
+  const [currentQuestions, setCurrentQuestions] = useState("recent");
   const socket = useSocket();
 
   const getData = async () => {
     const data = await fetchData();
     dispatch(setQuestions(data));
+    setPageQuestions(data);
   };
 
   const getNewQuestions = async () => {
@@ -34,6 +42,33 @@ const Home = () => {
     setShowBtn(false);
     document.documentElement.scrollTop = 0;
     document.body.scrollTop = 0;
+  };
+
+  const filterQuestions = async (param: string) => {
+    setCurrentQuestions(param);
+
+    if (param === "recent") {
+      await getData();
+    }
+
+    if (param === "top") {
+      setPageQuestions(
+        [...questions].sort((a, b) => b.answers.length - a.answers.length)
+      );
+    }
+
+    if (param === "following") {
+      if (_id) {
+        setPageQuestions(
+          [...questions].filter(
+            (question) =>
+              question.user &&
+              Array.isArray(question.user.followers) &&
+              question.user.followers.includes(_id)
+          )
+        );
+      }
+    }
   };
 
   useEffect(() => {
@@ -52,6 +87,10 @@ const Home = () => {
       navigate("/error-page");
     }
   }, [error, isLoading]);
+
+  useEffect(() => {
+    filterQuestions(currentQuestions);
+  }, [questions]);
 
   return (
     <>
@@ -77,22 +116,39 @@ const Home = () => {
               <QuestionBox />
             </MobileDiv>
             <div className={styles.filters}>
-              <div className={`${styles.filter} ${styles.active}`}>
+              <div
+                className={`${styles.filter} ${
+                  currentQuestions === "recent" ? styles.active : ""
+                }`}
+                onClick={() => filterQuestions("recent")}
+              >
                 <p>Recent</p>
                 <div className={styles.line}></div>
               </div>
-              <div className={styles.filter}>
-                <p>Following</p>
+              <div
+                className={`${styles.filter} ${
+                  currentQuestions === "top" ? styles.active : ""
+                }`}
+                onClick={() => filterQuestions("top")}
+              >
+                <p>Top Questions</p>
                 <div className={styles.line}></div>
               </div>
-              <div className={styles.filter}>
-                <p>Featured</p>
-                <div className={styles.line}></div>
-              </div>
+              {_id && (
+                <div
+                  className={`${styles.filter} ${
+                    currentQuestions === "following" ? styles.active : ""
+                  }`}
+                  onClick={() => filterQuestions("following")}
+                >
+                  <p>Following</p>
+                  <div className={styles.line}></div>
+                </div>
+              )}
             </div>
             <div className={styles.questions}>
               {error && <p>Something went wrong</p>}
-              {!questions || (!questions.length && isLoading) ? (
+              {!pageQuestions ? (
                 <>
                   <Skeleton
                     variant="rectangular"
@@ -125,9 +181,9 @@ const Home = () => {
                     style={{ marginBottom: "1rem" }}
                   />
                 </>
-              ) : questions.length ? (
+              ) : pageQuestions.length ? (
                 <>
-                  {questions.map((question) => (
+                  {pageQuestions.map((question) => (
                     <Question key={question._id} question={question} />
                   ))}
                 </>
