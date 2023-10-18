@@ -68,7 +68,7 @@ const Categories = () => {
             <h3 className={styles.title}>{category?.title}</h3>
 
             <div className={styles.questions}>
-              {!categoryQuestions ? (
+              {!categoryQuestions || !selected ? (
                 <>
                   <Skeleton
                     variant="rectangular"
