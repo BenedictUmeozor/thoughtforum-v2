@@ -96,11 +96,22 @@ const Profile = () => {
     <>
       <ProtectedLayout className={styles.main}>
         <AnimatePresence>
-          {showForm && (
-            <EditProfileForm key={"edit-profile"} setUser={setUser} onClick={hideForm} />
+          {showForm && user && (
+            <EditProfileForm
+              key={"edit-profile"}
+              user={user}
+              setUser={setUser}
+              onClick={hideForm}
+            />
           )}
-          {showModal && (
-            <UserModal key={"user-modal"} title={title} onClose={hideModal} />
+          {showModal && user && (
+            <UserModal
+              key={"user-modal"}
+              title={title}
+              id={user._id}
+              onClose={hideModal}
+              fetchUser={fetchUser}
+            />
           )}
         </AnimatePresence>
         <Container>
@@ -125,7 +136,7 @@ const Profile = () => {
                       </p>
                     </div>
                     <p className={styles.joined}>
-                      Joined:  {formatRFC7231(new Date(user.createdAt))}
+                      Joined: {formatRFC7231(new Date(user.createdAt))}
                     </p>
                   </div>
                 </Box>

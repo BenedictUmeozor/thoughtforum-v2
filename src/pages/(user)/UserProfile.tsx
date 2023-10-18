@@ -118,8 +118,14 @@ const UserProfile = () => {
   return (
     <>
       <AnimatePresence>
-        {showModal && (
-          <UserModal key={"user-modal"} title={title} onClose={hideModal} />
+        {showModal && user && (
+          <UserModal
+            key={"user-modal"}
+            title={title}
+            id={user._id}
+            onClose={hideModal}
+            fetchUser={fetchUser}
+          />
         )}
       </AnimatePresence>
       <main className={styles.main}>

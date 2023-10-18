@@ -8,7 +8,7 @@ import {
 } from "react";
 import Modal from "../../layout/Modal";
 import styles from "./forms.module.scss";
-import { useAppDispatch, useAppSelector } from "../../hooks";
+import { useAppDispatch } from "../../hooks";
 import { useAxiosAuth } from "../../hooks/useAxios";
 import Loading from "../../layout/Backdrop";
 import toast from "react-hot-toast";
@@ -18,11 +18,11 @@ import { UserProfile } from "../../helpers/types";
 
 type PropTypes = {
   onClick: () => void;
+  user: UserProfile;
   setUser: Dispatch<SetStateAction<UserProfile | null>>;
 };
 
-const EditProfileForm = ({ onClick, setUser }: PropTypes) => {
-  const user = useAppSelector((state) => state.user);
+const EditProfileForm = ({ onClick, setUser, user }: PropTypes) => {
   const [formData, setFormData] = useState({
     name: user.name,
     gender: user.gender,
