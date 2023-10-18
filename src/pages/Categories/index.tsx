@@ -37,18 +37,18 @@ const Categories = () => {
   };
 
   useEffect(() => {
-    if (categories) {
+    if (categories && categories.length) {
       setSelected(categories[0]._id);
     }
   }, [categories]);
 
   useEffect(() => {
-    if (questions && selected) {
+    if (questions && selected && categories) {
       setCategoryQuestions(
         [...questions].filter((question) => question.category._id === selected)
       );
     }
-  }, [questions, selected]);
+  }, [questions, selected, categories]);
 
   return (
     <main className={styles.main}>
