@@ -2,27 +2,21 @@ import { useEffect, useState } from "react";
 import HotQuestions from "../../components/HotQuestions";
 import Question from "../../components/Question";
 import TopMembers from "../../components/TopMembers";
-import { useAppDispatch, useAppSelector, useSocket } from "../../hooks";
-import { useAxiosInstance } from "../../hooks/useAxios";
+import { useAppSelector, useQuestionContext, useSocket } from "../../hooks";
 import Container from "../../layout/Container";
 import DesktopDiv from "../../layout/DesktopDiv";
 import MobileDiv from "../../layout/MobileDiv";
 import QuestionBox from "./QuestionBox";
 import styles from "./home.module.scss";
 import Skeleton from "@mui/material/Skeleton";
-import { setQuestions } from "../../features/QuestionSlice";
-import { useNavigate } from "react-router-dom";
-import toast from "react-hot-toast";
 import { ArrowUp } from "react-feather";
 import { AnimatePresence, motion } from "framer-motion";
 import { Question as QuestionType } from "../../helpers/types";
 
 const Home = () => {
   const [showBtn, setShowBtn] = useState(false);
-  const dispatch = useAppDispatch();
-  const { isLoading, fetchData, error } = useAxiosInstance("/questions");
+  const { setAppQuestions } = useQuestionContext();
   const questions = useAppSelector((state) => state.questions);
-  const navigate = useNavigate();
   const [pageQuestions, setPageQuestions] = useState<QuestionType[] | null>(
     null
   );
@@ -31,14 +25,8 @@ const Home = () => {
   const [currentQuestions, setCurrentQuestions] = useState("recent");
   const socket = useSocket();
 
-  const getData = async () => {
-    const data = await fetchData();
-    dispatch(setQuestions(data));
-    setPageQuestions(data);
-  };
-
   const getNewQuestions = async () => {
-    await getData();
+    await setAppQuestions();
     setShowBtn(false);
     document.documentElement.scrollTop = 0;
     document.body.scrollTop = 0;
@@ -48,7 +36,7 @@ const Home = () => {
     setCurrentQuestions(param);
 
     if (param === "recent") {
-      await getData();
+      setPageQuestions([...questions]);
     }
 
     if (param === "top") {
@@ -72,25 +60,14 @@ const Home = () => {
   };
 
   useEffect(() => {
-    getData();
-  }, []);
-
-  useEffect(() => {
     socket?.on("questionCreated", () => {
       setShowBtn(true);
     });
   }, [socket]);
 
   useEffect(() => {
-    if (error) {
-      toast.error("Something went wrong");
-      navigate("/error-page");
-    }
-  }, [error, isLoading]);
-
-  useEffect(() => {
     filterQuestions(currentQuestions);
-  }, [questions]);
+  }, [questions, currentQuestions]);
 
   return (
     <>
@@ -147,7 +124,6 @@ const Home = () => {
               )}
             </div>
             <div className={styles.questions}>
-              {error && <p>Something went wrong</p>}
               {!pageQuestions ? (
                 <>
                   <Skeleton

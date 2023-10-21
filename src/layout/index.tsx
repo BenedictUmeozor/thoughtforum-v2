@@ -12,7 +12,7 @@ import { Suspense, useEffect } from "react";
 import { getTheme } from "../utils";
 import Loader from "./Loader";
 import Footer from "../components/Footer";
-import { Toaster } from "react-hot-toast";
+import { Toaster, ToastBar } from "react-hot-toast";
 import { axiosAuth } from "../libs/axios";
 import { useAuthRefresh } from "../hooks/useAuthRefresh";
 import toast from "react-hot-toast";
@@ -22,6 +22,7 @@ import { Auth, Category } from "../helpers/types";
 import { useAxiosInstance } from "../hooks/useAxios";
 import { setCategories } from "../features/CategoriesSlice";
 import { setUser } from "../features/UserSlice";
+import { X } from "react-feather";
 
 const RootLayout = () => {
   const { _setTheme } = useThemeContext();
@@ -38,6 +39,7 @@ const RootLayout = () => {
     const getData = async () => {
       const data: Category[] = await fetchData();
       dispatch(setCategories(data));
+      await setAppQuestions();
     };
 
     getData();
@@ -90,10 +92,6 @@ const RootLayout = () => {
     }
   }, [contextError]);
 
-  useEffect(() => {
-    setAppQuestions();
-  }, []);
-
   axiosAuth.interceptors.request.use(
     async (config) => {
       const accessToken = JSON.parse(localStorage.getItem("accessToken")!);
@@ -141,20 +139,6 @@ const RootLayout = () => {
     }
   );
 
-  // axiosInstance.interceptors.response.use(
-  //   (response) => {
-  //     return response;
-  //   },
-  //   (error) => {
-  //     if (error.response && error.response.status === 401) {
-  //       dispatch(deleteCredentials());
-  //       toast.error("Session expired. Login again");
-  //       navigate("/login");
-  //     }
-  //     return Promise.reject(error);
-  //   }
-  // );
-
   return (
     <>
       <main className={styles.main}>
@@ -166,9 +150,29 @@ const RootLayout = () => {
         </section>
         <Footer />
       </main>
-      <Toaster
-        toastOptions={{ style: { width: "100%", zIndex: 999999999999999 } }}
-      />
+      <Toaster>
+        {(t) => (
+          <ToastBar toast={t}>
+            {({ icon, message }) => (
+              <>
+                <div className="toast-div">
+                  {icon}
+                  {message}
+                  {t.type !== "loading" && (
+                    <button
+                      className="toast-btn"
+                      onClick={() => toast.dismiss(t.id)}
+                    >
+                      <X />
+                    </button>
+                  )}
+                </div>
+              </>
+            )}
+          </ToastBar>
+        )}
+      </Toaster>
+      ;
     </>
   );
 };

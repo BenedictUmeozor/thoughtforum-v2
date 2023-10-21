@@ -122,3 +122,19 @@ svg {
     text-align: center;
   }
 }
+
+.toast-div {
+  display: flex;
+  align-items: center;
+  column-gap: 0.25rem;
+
+  button {
+    border: 0;
+    background-color: transparent;
+
+    svg {
+      width: 1.25rem;
+      color: crimson;
+    }
+  }
+}

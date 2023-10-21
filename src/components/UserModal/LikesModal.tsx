@@ -1,14 +1,45 @@
 import { X } from "react-feather";
+import { useState, useEffect } from "react";
 import Modal from "../../layout/Modal";
 import styles from "./modal.module.scss";
-// import User from "./User";
+import User from "./User";
+import { ModalUser } from "../../helpers/types";
+import { useAxiosInstance } from "../../hooks/useAxios";
+import toast from "react-hot-toast";
+import { CircularProgress } from "@mui/material";
 
 type PropTypes = {
-  id?: string | number;
-  onClose?: () => void;
+  title: string;
+  id: string | number;
+  onClose: () => void;
 };
 
-const LikesModal = ({ onClose }: PropTypes) => {
+const LikesModal = ({ title, onClose, id }: PropTypes) => {
+  const [users, setUsers] = useState<ModalUser[] | null>();
+  const endpoint = title?.toLowerCase();
+
+  const { error, fetchData } = useAxiosInstance(`/${endpoint}/likes/${id}`);
+
+  const getUsers = async () => {
+    const users: ModalUser[] = await fetchData();
+    setUsers(users);
+  };
+
+  const promise = async () => {
+    await Promise.all([getUsers()]);
+  };
+
+  useEffect(() => {
+    getUsers();
+  }, []);
+
+  useEffect(() => {
+    if (error) {
+      onClose();
+      toast.error("Something went wrong");
+    }
+  }, [error]);
+
   return (
     <Modal>
       <div className={styles.div}>
@@ -18,10 +49,27 @@ const LikesModal = ({ onClose }: PropTypes) => {
         <p className={styles.title}>Likes</p>
 
         <div className={styles.users}>
-          {/* <User />
-          <User />
-          <User />
-          <User /> */}
+          {users ? (
+            users.length ? (
+              users.map((user) => (
+                <User
+                  key={user._id}
+                  onClose={onClose}
+                  onFetch={promise}
+                  title={title}
+                  user={user}
+                />
+              ))
+            ) : (
+              <div className={styles.progress}>
+                <p>No data available</p>
+              </div>
+            )
+          ) : (
+            <div className={styles.progress}>
+              <CircularProgress size={"1rem"} color="primary" />
+            </div>
+          )}
         </div>
       </div>
     </Modal>

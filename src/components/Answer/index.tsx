@@ -11,6 +11,7 @@ import { formatRFC7231 } from "date-fns";
 import { useAppSelector } from "../../hooks";
 import { useAxiosAuth, useAxiosInstance } from "../../hooks/useAxios";
 import toast from "react-hot-toast";
+import LikesModal from "../UserModal/LikesModal";
 
 type PropTypes = {
   answer: AnswerType;
@@ -21,6 +22,7 @@ type PropTypes = {
 
 const Answer = ({ answer, id, setAnswers, refetch }: PropTypes) => {
   const [showMenu, setShowMenu] = useState(false);
+  const [showLikes, setShowLikes] = useState(false);
   const [showForm, setShowForm] = useState(false);
   const { _id } = useAppSelector((state) => state.auth);
 
@@ -79,6 +81,16 @@ const Answer = ({ answer, id, setAnswers, refetch }: PropTypes) => {
     setFixedBody(false);
   };
 
+  const displayLikes = () => {
+    setShowLikes(true);
+    setFixedBody(true);
+  };
+
+  const hideLikes = () => {
+    setShowLikes(false);
+    setFixedBody(false);
+  };
+
   useEffect(() => {
     if (likeError || deleteError) {
       toast.error("Something went wrong");
@@ -91,9 +103,15 @@ const Answer = ({ answer, id, setAnswers, refetch }: PropTypes) => {
         {showForm && (
           <EditAnswerForm
             answer={answer}
+            key={"Edit-answer-form"}
             onEdit={fetchAnswers}
             onClick={hideForm}
           />
+        )}
+      </AnimatePresence>
+      <AnimatePresence>
+        {showLikes && answer && (
+          <LikesModal id={answer._id} onClose={hideLikes} title="answers" key={"likes"} />
         )}
       </AnimatePresence>
       <div className={styles.answer}>
@@ -147,7 +165,7 @@ const Answer = ({ answer, id, setAnswers, refetch }: PropTypes) => {
                 }}
                 onClick={onLike}
               />
-              <p>{answer.likes.length}</p>
+              <p onClick={displayLikes}>{answer.likes.length}</p>
             </div>
           </div>
         </footer>

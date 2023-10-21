@@ -115,7 +115,12 @@ const Question = ({ question }: { question: QuestionType }) => {
       </AnimatePresence>
       <AnimatePresence>
         {showLikes && (
-          <LikesModal key={"like-modal-form"} onClose={hideLikes} />
+          <LikesModal
+            key={"like-modal-form"}
+            id={question._id}
+            title="questions"
+            onClose={hideLikes}
+          />
         )}
       </AnimatePresence>
       <div className={styles.question}>
