@@ -71,6 +71,7 @@ const Question = ({ question }: { question: QuestionType }) => {
       loading: "Deleting",
       success: () => {
         setAppQuestions();
+        socket?.emit("questionCreated");
         return "Your question was deleted";
       },
       error: "Failed to delete",

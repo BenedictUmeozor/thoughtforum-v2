@@ -23,6 +23,10 @@
           li {
             a {
               color: var(--scroll-link);
+
+              &.active {
+                color: #fefefe;
+              }
             }
           }
         }
