@@ -52,6 +52,17 @@
           margin: auto;
         }
 
+        small {
+          display: block;
+          margin-top: 1rem;
+          text-align: center;
+
+          a {
+            text-decoration: underline;
+            color: var(--main);
+          }
+        }
+
         .field {
           margin-bottom: 1.25rem;
 

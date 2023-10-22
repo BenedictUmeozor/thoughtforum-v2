@@ -1,15 +1,17 @@
-import { Backdrop, CircularProgress } from "@mui/material";
+import { Backdrop } from "@mui/material";
 import styles from "./layout.module.scss";
+import { FadeLoader } from "react-spinners";
+import { useThemeContext } from "../hooks";
 
 export default function Loading({ condition }: { condition: boolean }) {
+  const { theme } = useThemeContext();
   return (
-    <div className={styles.backdrop}>
-      <Backdrop
-        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
-        open={condition}
-      >
-        <CircularProgress color="inherit" />
-      </Backdrop>
-    </div>
+    <Backdrop
+      sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+      open={condition}
+      className={styles.backdrop}
+    >
+      <FadeLoader color={theme === "light" ? "#18298d" : "#1d66ee"} />
+    </Backdrop>
   );
 }

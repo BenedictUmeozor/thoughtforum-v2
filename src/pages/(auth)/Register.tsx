@@ -10,6 +10,7 @@ import { useAppDispatch, useSocket } from "../../hooks";
 import { setCredentials } from "../../features/AuthSlice";
 import { Auth } from "../../helpers/types";
 import Loading from "../../layout/Backdrop";
+import { Link } from "react-router-dom";
 
 const Register = () => {
   const dispatch = useAppDispatch();
@@ -67,7 +68,8 @@ const Register = () => {
           <div className={styles.right}>
             <h2>Create an account</h2>
             <p>
-            Unlock the door to knowledge at <span>ThoughtForum</span>, where questions find answers and ideas take flight
+              Unlock the door to knowledge at <span>ThoughtForum</span>, where
+              questions find answers and ideas take flight
             </p>
             <form onSubmit={handleSubmit}>
               <div className={styles.field}>
@@ -118,6 +120,9 @@ const Register = () => {
               <button disabled={isLoading} type="submit">
                 Continue <ArrowRight />
               </button>
+              <small>
+                Already have an account? <Link to="/login">Login</Link>
+              </small>
             </form>
           </div>
         </Container>

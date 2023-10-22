@@ -10,6 +10,7 @@ import { Auth } from "../../helpers/types";
 import { setCredentials } from "../../features/AuthSlice";
 import { useAxiosInstance } from "../../hooks/useAxios";
 import Loading from "../../layout/Backdrop";
+import { Link } from "react-router-dom";
 
 const Login = () => {
   const dispatch = useAppDispatch();
@@ -90,6 +91,9 @@ const Login = () => {
               <button type="submit">
                 Continue <ChevronRight />
               </button>
+              <small>
+                Don't have an account? <Link to="/register">Register</Link>
+              </small>
             </form>
           </div>
         </Container>
