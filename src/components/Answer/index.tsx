@@ -123,7 +123,7 @@ const Answer = ({ answer, id, setAnswers, refetch }: PropTypes) => {
       <div className={styles.answer}>
         <header>
           <div className={styles.user}>
-            <Avatar />
+            <Avatar name={answer.user.name} />
             <Link to={"/user/" + answer.user._id}>
               <h3>{answer.user.name}</h3>
             </Link>

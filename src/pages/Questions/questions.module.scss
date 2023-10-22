@@ -193,6 +193,7 @@
     .answers_grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
+      align-items: center;
       gap: 1rem 0.5rem;
 
       @include mobile {
