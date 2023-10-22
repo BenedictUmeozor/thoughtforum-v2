@@ -178,10 +178,6 @@ const UserProfile = () => {
                     <p>{user.bio}</p>
                   </div>
                   <div className={styles.detail}>
-                    <p>Email:</p>
-                    <p>{user.email}</p>
-                  </div>
-                  <div className={styles.detail}>
                     <p>Gender:</p>
                     <p>{user.gender}</p>
                   </div>
