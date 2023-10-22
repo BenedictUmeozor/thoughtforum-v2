@@ -55,15 +55,24 @@ const RootLayout = () => {
 
   useEffect(() => {
     socket?.on("like", (user) => {
-      toast.success(user + " liked your question");
+      const text = user
+        ? user + " liked your question"
+        : "a user liked your question";
+      toast.success(text);
     });
 
     socket?.on("answer", (user) => {
-      toast.success(user + " answered your question");
+      const text = user
+        ? user + " answered your question"
+        : "a user answered your question";
+      toast.success(text);
     });
 
     socket?.on("follow", (user) => {
-      toast.success(user + " started following you");
+      const text = user
+        ? user + " started following you"
+        : "a user started following you";
+      toast.success(text);
     });
   }, [socket]);
 
