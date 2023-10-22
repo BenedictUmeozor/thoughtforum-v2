@@ -108,6 +108,7 @@ const RootLayout = () => {
         const data: Auth = await getData();
         if (!data) {
           dispatch(deleteCredentials());
+          dispatch(deleteUser());
           navigate("/login");
           toast.error("Session expired. Login again");
         }
@@ -133,12 +134,6 @@ const RootLayout = () => {
       return response;
     },
     (error) => {
-      if (error.response && error.response.status === 401) {
-        dispatch(deleteCredentials());
-        dispatch(deleteUser());
-        toast.error("Session expired. Login again");
-        navigate("/login");
-      }
       return Promise.reject(error);
     }
   );
