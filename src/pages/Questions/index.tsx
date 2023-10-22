@@ -39,7 +39,9 @@ const Questions = () => {
   const navigate = useNavigate();
   const { setAppQuestions } = useQuestionContext();
 
-  const { fetchData: getQuestion } = useAxiosInstance("/questions/" + id);
+  const { fetchData: getQuestion, error: questionError } = useAxiosInstance(
+    "/questions/" + id
+  );
   const { fetchData: getAnswers } = useAxiosInstance("/answers/" + id);
   const {
     fetchData: likeQuestion,
@@ -114,8 +116,17 @@ const Questions = () => {
 
     const promise = await likeQuestion();
     if (promise) {
-      const question: Question = await getQuestion();
-      setQuestion(question);
+      if (question?.user._id !== userId) {
+        if (!question?.likes.includes(userId)) {
+          socket?.emit("like", {
+            _id: question?.user._id,
+            type: "question",
+            name: user?.name,
+          });
+        }
+      }
+      const q: Question = await getQuestion();
+      setQuestion(q);
     }
 
     if (likeError) {
@@ -159,6 +170,12 @@ const Questions = () => {
       await getData();
     });
   }, [socket]);
+
+  useEffect(() => {
+    if (questionError) {
+      navigate("/error-page");
+    }
+  }, [questionError]);
 
   return (
     <>

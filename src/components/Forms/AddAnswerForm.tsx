@@ -38,8 +38,8 @@ const AddAnswerForm = ({ onClick, onAdd, user_id, question }: PropTypes) => {
       loading: "Posting your answer...",
       success: () => {
         socket?.emit("answerCreated");
-        if (_id !== user._id) {
-          socket?.emit("answer", { _id: user_id, name: user.name });
+        if (_id !== user_id) {
+          socket?.emit("answer", { _id: user_id, name: user?.name });
         }
         onAdd();
         onClick();
