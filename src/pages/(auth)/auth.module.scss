@@ -61,6 +61,7 @@
             padding: 0.25rem 0;
             background-color: transparent;
             height: 45px;
+            color: var(--text-color);
 
             &:focus {
               outline: none;
@@ -77,6 +78,11 @@
             padding: 0.25rem 0;
             background-color: transparent;
             height: 45px;
+            color: var(--text-color);
+
+            &::placeholder {
+              color: var(--light-text);
+            }
 
             &:focus {
               outline: none;
@@ -107,12 +113,12 @@
         background-color: var(--main);
         border: 0.15rem solid transparent;
         border-radius: 0.25rem;
-        color: var(--primary);
+        color: #efefef;
         font-size: 0.95rem;
         font-weight: 500;
 
         &:hover {
-          background-color: darken($color: #18298d, $amount: 15);
+          transform: scale(0.95);
         }
       }
     }

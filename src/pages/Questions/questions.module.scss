@@ -133,6 +133,7 @@
 
         p {
           font-size: 0.95rem;
+          color: var(--light-text);
           margin-bottom: 0.5rem;
         }
 
@@ -173,6 +174,7 @@
           font-weight: 500;
           appearance: none;
           border: none;
+          color: var(--main);
           background-color: transparent;
         }
       }

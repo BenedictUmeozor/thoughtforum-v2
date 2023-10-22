@@ -60,7 +60,8 @@ const Login = () => {
           <div className={styles.right}>
             <h2>Welcome Back!</h2>
             <p>
-              Welcome to <span>ThoughtForum</span>. Lorem ipsum dolor sit amet.
+              Unlock the door to knowledge at <span>ThoughtForum</span>, where
+              questions find answers and ideas take flight
             </p>
             <form onSubmit={handleSubmit}>
               <div className={styles.field}>

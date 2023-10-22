@@ -19,6 +19,7 @@ const MobileNav = ({ onClick }: FunctionProp) => {
     } else {
       _setTheme("light");
     }
+    onClick();
   };
 
   const displayModal = () => {

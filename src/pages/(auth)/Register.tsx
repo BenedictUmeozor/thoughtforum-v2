@@ -2,7 +2,7 @@ import { useState, FormEvent, useEffect } from "react";
 import Container from "../../layout/Container";
 import styles from "./auth.module.scss";
 import image from "../../assets/singup.svg";
-import { ChevronRight } from "react-feather";
+import { ArrowRight } from "react-feather";
 import UnprotectedLayout from "../../layout/UnprotectedLayout";
 import { useAxiosInstance } from "../../hooks/useAxios";
 import { toast } from "react-hot-toast";
@@ -67,7 +67,7 @@ const Register = () => {
           <div className={styles.right}>
             <h2>Create an account</h2>
             <p>
-              Welcome to <span>ThoughtForum</span>. Lorem ipsum dolor sit amet.
+            Unlock the door to knowledge at <span>ThoughtForum</span>, where questions find answers and ideas take flight
             </p>
             <form onSubmit={handleSubmit}>
               <div className={styles.field}>
@@ -116,7 +116,7 @@ const Register = () => {
                 <div className={styles.line}></div>
               </div>
               <button disabled={isLoading} type="submit">
-                Continue <ChevronRight />
+                Continue <ArrowRight />
               </button>
             </form>
           </div>

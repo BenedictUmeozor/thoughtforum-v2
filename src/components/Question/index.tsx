@@ -1,5 +1,5 @@
 import styles from "./question.module.scss";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   Heart,
   MessageSquare,
@@ -27,6 +27,8 @@ const Question = ({ question }: { question: QuestionType }) => {
   const [showLikes, setShowLikes] = useState(false);
   const user = useAppSelector((state) => state.user);
   const { setAppQuestions } = useQuestionContext();
+
+  const navigate = useNavigate();
 
   const { fetchData: likeFetch, isLoading: likeLoading } = useAxiosAuth(
     "/questions/like/" + question._id,
@@ -188,7 +190,9 @@ const Question = ({ question }: { question: QuestionType }) => {
               <p onClick={displayLikes}>{question.likes.length}</p>
             </div>
             <div>
-              <MessageSquare />
+              <MessageSquare
+                onClick={() => navigate("/questions/" + question._id)}
+              />
               <p>{question.answers.length}</p>
             </div>
           </div>

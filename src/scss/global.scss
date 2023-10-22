@@ -15,7 +15,9 @@
   --border-color: #eee;
   --body-bg: #f5f5f5;
   --primary: #fdfdfd;
-  --scrolled: rgba(255, 255, 255, 0.9);
+  --scrolled: rgba(47, 93, 179, 1);
+  --scroll-color: #fdfdfd;
+  --scroll-link: #ccc;
   --paragraph: #777777;
   --text-color: #111111;
   --menu-bg: #f5f5f5;
@@ -25,16 +27,20 @@
   --button-border: #ccc;
   --question-bg: #eff2f3;
   --line-color: #ccc;
+  --light-text: #333;
+  --question-text: #444;
   scroll-behavior: smooth;
 }
 
 :root.dark {
   --body-bg: #1e252b;
   --main: #1d66ee;
-  --secondary: #e93e13;
+  --secondary: #e99e13;
   --primary: #262d34;
   --border-color: #444;
   --scrolled: rgba(20, 20, 20, 0.7);
+  --scroll-color: #566072;
+  --scroll-link: #777;
   --paragragh: #949495;
   --text-color: #fdfdfd;
   --menu-bg: #2b323a;
@@ -44,6 +50,8 @@
   --button-border: #555;
   --question-bg: #3f4344;
   --line-color: #777;
+  --light-text: #dadada;
+  --question-text: #ccc;
 }
 
 ::-webkit-scrollbar {
@@ -87,6 +95,7 @@ select {
 
   &::placeholder {
     font-family: "Poppins", sans-serif;
+    color: var(--light-text);
   }
 
   &:focus {
@@ -96,13 +105,13 @@ select {
 
 textarea {
   width: 100%;
-
   border-radius: 0.25rem solid transparent;
   padding: 0.5rem;
   font-family: "Poppins", sans-serif;
 
   &::placeholder {
     font-family: "Poppins", sans-serif;
+    color: var(--light-text);
   }
 
   &:focus {

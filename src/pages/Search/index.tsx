@@ -59,13 +59,13 @@ const SearchPage = () => {
           <div className={styles.search}>
             <h2>Enter your search:</h2>
             <div className={styles.searchBar}>
-              <Search />
               <input
                 type="text"
                 placeholder="Search here"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
+              <Search />
             </div>
           </div>
 

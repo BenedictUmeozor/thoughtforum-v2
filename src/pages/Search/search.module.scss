@@ -44,10 +44,17 @@
             appearance: none;
             border: 0.15rem solid #aaa;
             font-family: "Poppins", sans-serif;
+            background-color: #ddd;
+
+            &::placeholder {
+              color: #666;
+            }
 
             &:focus {
-              outline: none;
               border-color: var(--main);
+              & ~ svg {
+                color: var(--main);
+              }
             }
           }
         }

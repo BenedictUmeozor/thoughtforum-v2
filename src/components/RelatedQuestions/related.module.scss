@@ -1,5 +1,7 @@
 .div {
   a {
+    display: block;
+
     &:hover {
       text-decoration: underline;
     }
@@ -50,7 +52,7 @@
   }
 
   p {
-    color: #444;
+    color: var(--question-text);
     font-size: 0.93rem;
   }
 }

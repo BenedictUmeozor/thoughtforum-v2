@@ -23,12 +23,14 @@ import { useAxiosInstance } from "../hooks/useAxios";
 import { setCategories } from "../features/CategoriesSlice";
 import { setUser } from "../features/UserSlice";
 import { X } from "react-feather";
+import ScrollToTop from "../components/ScrollToTop";
 
 const RootLayout = () => {
   const { _setTheme } = useThemeContext();
   const { _id } = useAppSelector((state) => state.auth);
   const { error: contextError, setAppQuestions } = useQuestionContext();
   const { getData, error } = useAuthRefresh();
+  const { theme } = useThemeContext();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const socket = useSocket();
@@ -141,6 +143,7 @@ const RootLayout = () => {
 
   return (
     <>
+      <ScrollToTop />
       <main className={styles.main}>
         <Header />
         <section>
@@ -150,7 +153,16 @@ const RootLayout = () => {
         </section>
         <Footer />
       </main>
-      <Toaster toastOptions={{ style: { width: "100%", zIndex: 99999999 } }}>
+      <Toaster
+        toastOptions={{
+          style: {
+            width: "100%",
+            zIndex: 99999999,
+            backgroundColor: theme === "light" ? "#fff" : "#262d34",
+            color: theme === "light" ? "111" : "#fefefe",
+          },
+        }}
+      >
         {(t) => (
           <ToastBar toast={t}>
             {({ icon, message }) => (

@@ -161,7 +161,7 @@ const Answer = ({ answer, id, setAnswers, refetch }: PropTypes) => {
           <div className={styles.action}>
             <div>
               <Heart
-                fill={_id && answer.likes.includes(_id) ? "crimson" : "white"}
+                fill={_id && answer.likes.includes(_id) ? "crimson" : "none"}
                 stroke={
                   _id && answer.likes.includes(_id) ? "crimson" : "currentColor"
                 }
