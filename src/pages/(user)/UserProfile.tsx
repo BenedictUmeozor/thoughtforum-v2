@@ -26,6 +26,7 @@ const UserProfile = () => {
   const [user, setUser] = useState<UserType | null>(null);
   const [questions, setQuestions] = useState<QuestionType[] | null>(null);
   const { _id } = useAppSelector((state) => state.auth);
+  const appUser = useAppSelector((state) => state.user);
   const { id } = useParams();
   const navigate = useNavigate();
   const socket = useSocket();
@@ -75,7 +76,7 @@ const UserProfile = () => {
           : `You are now following ${user?.name}`;
         toast.success(text);
         if (!user?.followers.includes(_id!)) {
-          socket?.emit("follow", { _id: user?._id, name: user?.name });
+          socket?.emit("follow", { _id: id, name: appUser?.name });
         }
       });
     }

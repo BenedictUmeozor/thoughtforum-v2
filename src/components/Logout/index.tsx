@@ -6,6 +6,7 @@ import { useAppDispatch, useAppSelector, useSocket } from "../../hooks";
 import Loading from "../../layout/Backdrop";
 import { deleteCredentials } from "../../features/AuthSlice";
 import toast from "react-hot-toast";
+import { deleteUser } from "../../features/UserSlice";
 
 const Logout = ({ onClose }: { onClose: () => void }) => {
   const { refreshToken: token } = useAppSelector((state) => state.auth);
@@ -20,6 +21,7 @@ const Logout = ({ onClose }: { onClose: () => void }) => {
       loading: "Logging you out",
       success: () => {
         dispatch(deleteCredentials());
+        dispatch(deleteUser());
         socket?.emit("logout");
         onClose();
         return "You are now logged out";

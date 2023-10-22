@@ -21,7 +21,7 @@ import { deleteCredentials, setCredentials } from "../features/AuthSlice";
 import { Auth, Category } from "../helpers/types";
 import { useAxiosInstance } from "../hooks/useAxios";
 import { setCategories } from "../features/CategoriesSlice";
-import { setUser } from "../features/UserSlice";
+import { deleteUser, setUser } from "../features/UserSlice";
 import { X } from "react-feather";
 import ScrollToTop from "../components/ScrollToTop";
 
@@ -112,6 +112,7 @@ const RootLayout = () => {
           toast.error("Session expired. Login again");
         }
         dispatch(setCredentials(data));
+        dispatch(deleteUser());
 
         config.headers.Authorization = JSON.parse(
           localStorage.getItem("accessToken")!
@@ -134,6 +135,7 @@ const RootLayout = () => {
     (error) => {
       if (error.response && error.response.status === 401) {
         dispatch(deleteCredentials());
+        dispatch(deleteUser());
         toast.error("Session expired. Login again");
         navigate("/login");
       }
