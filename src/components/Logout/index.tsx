@@ -16,15 +16,16 @@ const Logout = ({ onClose }: { onClose: () => void }) => {
   });
 
   const handleLogout = async () => {
-    const data = await fetchData();
-    if (data) {
-      dispatch(deleteCredentials());
-      socket?.emit("logout");
-      toast.success("You are now logged out")
-      onClose();
-    } else {
-      toast.error("Something went wrong");
-    }
+    toast.promise(fetchData(), {
+      loading: "Logging you out",
+      success: () => {
+        dispatch(deleteCredentials());
+        socket?.emit("logout");
+        onClose();
+        return "You are now logged out";
+      },
+      error: "Something went wrong",
+    });
   };
 
   return (

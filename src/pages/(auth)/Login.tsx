@@ -25,19 +25,22 @@ const Login = () => {
     formData
   );
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (!formData.email || !formData.password) {
       return toast.error("All fields are required");
     }
 
-    const data: Auth = await fetchData();
-    if (data) {
-      dispatch(setCredentials(data));
-      socket?.emit("login", data._id);
-      return toast.success("Logged in successfully");
-    }
+    toast.promise(fetchData(), {
+      loading: "Logging in...",
+      success: (data: Auth) => {
+        dispatch(setCredentials(data));
+        socket?.emit("login", data._id);
+        return "Logged in successfully";
+      },
+      error: "Login failed",
+    });
   };
 
   useEffect(() => {

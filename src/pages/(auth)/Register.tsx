@@ -39,12 +39,15 @@ const Register = () => {
       return toast.error("All fields are required");
     }
 
-    const data: Auth = await fetchData();
-    if (data) {
-      dispatch(setCredentials(data));
-      socket?.emit("login", data._id);
-      return toast.success("Logged in successfully");
-    }
+    toast.promise(fetchData(), {
+      loading: "Signing up...",
+      success: (data: Auth) => {
+        dispatch(setCredentials(data));
+        socket?.emit("login", data._id);
+        return "Registered successfully";
+      },
+      error: "Registration failed",
+    });
   };
 
   useEffect(() => {

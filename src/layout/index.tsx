@@ -150,7 +150,7 @@ const RootLayout = () => {
         </section>
         <Footer />
       </main>
-      <Toaster>
+      <Toaster toastOptions={{ style: { width: "100%" } }}>
         {(t) => (
           <ToastBar toast={t}>
             {({ icon, message }) => (

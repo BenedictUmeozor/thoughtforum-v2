@@ -1,3 +1,5 @@
+@import "../../scss/breakpoints";
+
 .modal {
   .close {
     display: flex;
@@ -41,17 +43,33 @@
   }
 
   .buttons {
+    display: flex;
+    align-items: center;
+    column-gap: 0.5rem;
+
+    @include mobile {
+      display: block;
+    }
+
     button {
-      width: 100%;
+      flex: 1;
       display: block;
       padding: 0.75rem 0;
       border: 0.15rem solid transparent;
       border-radius: 0.25rem;
+      font-family: "Poppins", sans-serif;
+
+      @include mobile {
+        width: 100%;
+      }
 
       &:first-child {
         background-color: var(--main);
         color: #fff;
-        margin-bottom: 0.5rem;
+
+        @include mobile {
+          margin-bottom: 0.5rem;
+        }
       }
 
       &:last-child {
