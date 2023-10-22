@@ -66,8 +66,10 @@ const Home = () => {
   }, [socket]);
 
   useEffect(() => {
-    filterQuestions(currentQuestions);
-  }, [questions, currentQuestions]);
+    if (!contextLoading) {
+      filterQuestions(currentQuestions);
+    }
+  }, [questions, currentQuestions, contextLoading]);
 
   return (
     <>
@@ -124,7 +126,7 @@ const Home = () => {
               )}
             </div>
             <div className={styles.questions}>
-              {!pageQuestions || contextLoading ? (
+              {!pageQuestions ? (
                 <>
                   <Skeleton
                     variant="rectangular"

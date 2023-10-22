@@ -19,7 +19,7 @@
   justify-content: center;
 
   .content {
-    background-color: #fff;
+    background-color: var(--modal-bg);
     width: 90%;
     max-height: 95vh;
     max-width: 500px;

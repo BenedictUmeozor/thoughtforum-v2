@@ -12,7 +12,7 @@
   font-family: "Inter", sans-serif;
   --main: #18298d;
   --secondary: #b33131;
-  --border: #eee;
+  --border-color: #eee;
   --body-bg: #f5f5f5;
   --primary: #fdfdfd;
   --scrolled: rgba(255, 255, 255, 0.9);
@@ -21,19 +21,29 @@
   --menu-bg: #f5f5f5;
   --menu-hover: #efefef;
   --fade: #777777;
+  --modal-bg: #fff;
+  --button-border: #ccc;
+  --question-bg: #eff2f3;
+  --line-color: #ccc;
   scroll-behavior: smooth;
 }
 
 :root.dark {
   --body-bg: #1e252b;
+  --main: #1d66ee;
+  --secondary: #e93e13;
   --primary: #262d34;
-  ---border: #333;
+  --border-color: #444;
   --scrolled: rgba(20, 20, 20, 0.7);
   --paragragh: #949495;
   --text-color: #fdfdfd;
   --menu-bg: #2b323a;
   --menu-hover: #303841;
   --fade: #949495;
+  --modal-bg: #262d34;
+  --button-border: #555;
+  --question-bg: #3f4344;
+  --line-color: #777;
 }
 
 ::-webkit-scrollbar {

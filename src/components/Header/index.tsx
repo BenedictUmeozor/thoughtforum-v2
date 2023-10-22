@@ -59,7 +59,6 @@ const Header = () => {
           </Link>
           <DesktopNav />
           <DesktopDiv className={styles.search}>
-            <Search />
             <input
               type="text"
               placeholder="Enter a search"
@@ -71,6 +70,7 @@ const Header = () => {
                 }
               }}
             />
+            <Search />
           </DesktopDiv>
           <MobileDiv onClick={() => setShowNav((prev) => !prev)}>
             {showNav ? <X /> : <Menu />}

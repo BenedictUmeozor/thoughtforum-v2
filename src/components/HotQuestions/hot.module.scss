@@ -30,7 +30,7 @@
 .child {
   background-color: var(--primary);
   padding: 1rem 0.75rem;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid var(--border-color);
 
   &:last-child {
     border-bottom: 0;
