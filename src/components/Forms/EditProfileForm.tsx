@@ -1,11 +1,5 @@
 import { X } from "react-feather";
-import {
-  useState,
-  useEffect,
-  FormEvent,
-  Dispatch,
-  SetStateAction,
-} from "react";
+import { useState, FormEvent, Dispatch, SetStateAction } from "react";
 import Modal from "../../layout/Modal";
 import styles from "./forms.module.scss";
 import { useAppDispatch } from "../../hooks";
@@ -36,11 +30,11 @@ const EditProfileForm = ({ onClick, setUser, user }: PropTypes) => {
     setUser(data);
   };
 
-  const {
-    isLoading,
-    fetchData: editQuestion,
-    error,
-  } = useAxiosAuth("/users", "put", formData);
+  const { isLoading, fetchData: editUser } = useAxiosAuth(
+    "/users",
+    "put",
+    formData
+  );
 
   const onEdit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -49,20 +43,16 @@ const EditProfileForm = ({ onClick, setUser, user }: PropTypes) => {
       return;
     }
 
-    const promise = await editQuestion();
-    if (promise) {
-      getUser().then(() => {
+    toast.promise(editUser(), {
+      loading: "Updating your profile",
+      success: () => {
+        getUser();
         onClick();
-        toast.success("Profile updated successfully");
-      });
-    }
+        return "Your profile was updated";
+      },
+      error: "Failed to update your profile",
+    });
   };
-
-  useEffect(() => {
-    if (error) {
-      toast.error("Something went wrong");
-    }
-  }, [error]);
 
   return (
     <>
@@ -84,6 +74,7 @@ const EditProfileForm = ({ onClick, setUser, user }: PropTypes) => {
                   setFormData({ ...formData, name: e.target.value })
                 }
               />
+              <div className={styles.line}></div>
             </div>
             <div className={styles.field}>
               <input
@@ -92,6 +83,7 @@ const EditProfileForm = ({ onClick, setUser, user }: PropTypes) => {
                 placeholder="Enter email"
                 disabled
               />
+              <div className={styles.line}></div>
             </div>
             <div className={styles.field}>
               <select
@@ -103,6 +95,7 @@ const EditProfileForm = ({ onClick, setUser, user }: PropTypes) => {
                 <option value="male">Male</option>
                 <option value="female">Female</option>
               </select>
+              <div className={styles.line}></div>
             </div>
             <div className={styles.field}>
               <textarea
@@ -113,6 +106,7 @@ const EditProfileForm = ({ onClick, setUser, user }: PropTypes) => {
                   setFormData({ ...formData, bio: e.target.value })
                 }
               ></textarea>
+              <div className={styles.line}></div>
             </div>
             <button>Edit Profile</button>
           </div>

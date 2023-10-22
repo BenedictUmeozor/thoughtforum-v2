@@ -8,7 +8,7 @@ import {
   Trash2,
   Edit2,
 } from "react-feather";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Avatar from "../Avatar";
 import { setFixedBody } from "../../utils";
 import { AnimatePresence } from "framer-motion";
@@ -33,11 +33,10 @@ const Question = ({ question }: { question: QuestionType }) => {
     "post"
   );
 
-  const {
-    fetchData: deleteQuestion,
-    isLoading: deleteLoading,
-    error: deleteError,
-  } = useAxiosAuth("/questions/" + question._id, "delete");
+  const { fetchData: deleteQuestion, isLoading: deleteLoading } = useAxiosAuth(
+    "/questions/" + question._id,
+    "delete"
+  );
   const socket = useSocket();
 
   const likeQuestion = async () => {
@@ -66,12 +65,14 @@ const Question = ({ question }: { question: QuestionType }) => {
       return;
     }
 
-    const promise = await deleteQuestion();
-
-    if (promise) {
-      await setAppQuestions();
-      toast.success("Your question was deleted");
-    }
+    toast.promise(deleteQuestion(), {
+      loading: "Deleting",
+      success: () => {
+        setAppQuestions();
+        return "Your question was deleted";
+      },
+      error: "Failed to delete",
+    });
   };
 
   const displayForm = () => {
@@ -95,12 +96,6 @@ const Question = ({ question }: { question: QuestionType }) => {
     setShowLikes(false);
     setFixedBody(false);
   };
-
-  useEffect(() => {
-    if (deleteError) {
-      toast.error("Something went wrong");
-    }
-  }, [deleteError, deleteLoading]);
 
   return (
     <>

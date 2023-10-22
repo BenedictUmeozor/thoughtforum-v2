@@ -8,7 +8,7 @@
 
 .modal {
   z-index: 9;
-  background-color: rgba(0, 0, 0, 0.7);
+  background-color: #000000b3;
   position: fixed;
   top: 0;
   left: 0;
@@ -21,7 +21,7 @@
   .content {
     background-color: #fff;
     width: 90%;
-    max-height: 90vh;
+    max-height: 95vh;
     max-width: 500px;
     margin: auto;
     padding: 1rem;

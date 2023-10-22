@@ -1,5 +1,5 @@
 import { X } from "react-feather";
-import { useState, useEffect, FormEvent } from "react";
+import { useState, FormEvent } from "react";
 import Modal from "../../layout/Modal";
 import styles from "./forms.module.scss";
 import { Answer } from "../../helpers/types";
@@ -17,8 +17,8 @@ type PropTypes = {
 const EditAnswerForm = ({ onClick, answer, onEdit }: PropTypes) => {
   const [text, setText] = useState(answer.text);
   const [validationError, setValidationError] = useState("");
-  const socket = useSocket()
-  const { isLoading, error, fetchData } = useAxiosAuth(
+  const socket = useSocket();
+  const { isLoading, fetchData } = useAxiosAuth(
     "/answers/" + answer._id,
     "put",
     { text }
@@ -33,21 +33,17 @@ const EditAnswerForm = ({ onClick, answer, onEdit }: PropTypes) => {
       return;
     }
 
-    const editAnswer = await fetchData();
-    if (editAnswer) {
-      socket?.emit("answerCreated");
-      await onEdit();
-      onClick();
-      toast.success("Answer updated");
-    }
+    toast.promise(fetchData(), {
+      loading: "Updating your answer",
+      success: () => {
+        socket?.emit("answerCreated");
+        onEdit();
+        onClick();
+        return "Your answer was updated";
+      },
+      error: "Could not update answer",
+    });
   };
-
-  useEffect(() => {
-    if (error) {
-      onClick();
-      toast.error("Something went wrong");
-    }
-  }, [error]);
 
   return (
     <>
@@ -63,7 +59,6 @@ const EditAnswerForm = ({ onClick, answer, onEdit }: PropTypes) => {
 
           <div className={styles.fields}>
             <div className={styles.field}>
-              <label>Body:</label>
               <textarea
                 rows={8}
                 placeholder="Enter answer body"
@@ -71,7 +66,7 @@ const EditAnswerForm = ({ onClick, answer, onEdit }: PropTypes) => {
                 onChange={(e) => setText(e.target.value)}
               ></textarea>
             </div>
-            <button>Update</button>
+            <button>Update this answer</button>
           </div>
         </form>
       </Modal>

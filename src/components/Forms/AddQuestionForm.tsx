@@ -1,7 +1,7 @@
 import { X } from "react-feather";
 import Modal from "../../layout/Modal";
 import styles from "./forms.module.scss";
-import { useState, FormEvent, useEffect } from "react";
+import { useState, FormEvent } from "react";
 import { useAppDispatch, useAppSelector, useSocket } from "../../hooks";
 import toast from "react-hot-toast";
 import { useAxiosAuth, useAxiosInstance } from "../../hooks/useAxios";
@@ -23,11 +23,11 @@ const AddQuestionForm = ({ onClick }: PropTypes) => {
   const [validationError, setValidationError] = useState("");
   const dispatch = useAppDispatch();
   const socket = useSocket();
-  const {
-    error,
-    fetchData: createQuestion,
-    isLoading,
-  } = useAxiosAuth("/questions", "post", formData);
+  const { fetchData: createQuestion, isLoading } = useAxiosAuth(
+    "/questions",
+    "post",
+    formData
+  );
   const { fetchData: getQuestions } = useAxiosInstance("/questions");
 
   const submitForm = async (e: FormEvent<HTMLFormElement>) => {
@@ -37,22 +37,19 @@ const AddQuestionForm = ({ onClick }: PropTypes) => {
       setValidationError("All fields are required");
       return;
     }
-    const promise = await createQuestion();
-    if (promise) {
-      socket?.emit("questionCreated");
-      const questions = await getQuestions();
-      dispatch(setQuestions(questions));
-      onClick();
-      return toast.success("Your question was posted");
-    }
+    toast.promise(createQuestion(), {
+      loading: "Posting your question",
+      success: () => {
+        socket?.emit("questionCreated");
+        getQuestions().then((questions) => {
+          dispatch(setQuestions(questions));
+          onClick();
+        });
+        return "Your question was posted";
+      },
+      error: "Error creating question",
+    });
   };
-
-  useEffect(() => {
-    if (error) {
-      onClick();
-      toast.error("Something went wrong");
-    }
-  }, []);
 
   return (
     <>
@@ -68,7 +65,6 @@ const AddQuestionForm = ({ onClick }: PropTypes) => {
 
           <div className={styles.fields}>
             <div className={styles.field}>
-              <label>Title:</label>
               <input
                 type="text"
                 placeholder="Enter title"
@@ -77,9 +73,9 @@ const AddQuestionForm = ({ onClick }: PropTypes) => {
                   setFormData({ ...formData, title: e.target.value })
                 }
               />
+              <div className={styles.line}></div>
             </div>
             <div className={styles.field}>
-              <label>Category:</label>
               <select
                 value={formData.category}
                 onChange={(e) =>
@@ -92,9 +88,9 @@ const AddQuestionForm = ({ onClick }: PropTypes) => {
                   </option>
                 ))}
               </select>
+              <div className={styles.line}></div>
             </div>
             <div className={styles.field}>
-              <label>Body:</label>
               <textarea
                 rows={8}
                 placeholder="Enter question body"
@@ -103,6 +99,7 @@ const AddQuestionForm = ({ onClick }: PropTypes) => {
                   setFormData({ ...formData, body: e.target.value })
                 }
               ></textarea>
+              <div className={styles.line}></div>
             </div>
             <button>Create question</button>
           </div>

@@ -1,5 +1,5 @@
 import { X } from "react-feather";
-import { useState, useEffect, FormEvent } from "react";
+import { useState, FormEvent } from "react";
 import Modal from "../../layout/Modal";
 import styles from "./forms.module.scss";
 import { useAxiosAuth } from "../../hooks/useAxios";
@@ -9,7 +9,7 @@ import Loading from "../../layout/Backdrop";
 
 type PropTypes = {
   onClick: () => void;
-  onAdd: () => void;
+  onAdd: () => Promise<void>;
   user_id: string;
   question: string;
 };
@@ -20,11 +20,10 @@ const AddAnswerForm = ({ onClick, onAdd, user_id, question }: PropTypes) => {
   const user = useAppSelector((state) => state.user);
   const { _id } = useAppSelector((state) => state.auth);
   const socket = useSocket();
-  const {
-    error,
-    isLoading,
-    fetchData: addAnswer,
-  } = useAxiosAuth("/answers", "post", { text, question });
+  const { isLoading, fetchData: addAnswer } = useAxiosAuth("/answers", "post", {
+    text,
+    question,
+  });
 
   const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -35,24 +34,21 @@ const AddAnswerForm = ({ onClick, onAdd, user_id, question }: PropTypes) => {
       return;
     }
 
-    const createAnswer = await addAnswer();
-    if (createAnswer) {
-      socket?.emit("answerCreated");
-      if (_id !== user_id) {
-        socket?.emit("answer", { _id: user_id, name: user.name });
-      }
-      await onAdd();
-      onClick();
-      toast.success("Your answer was created")
-    }
+    toast.promise(addAnswer(), {
+      loading: "Posting your answer...",
+      success: () => {
+        socket?.emit("answerCreated");
+        if (_id !== user._id) {
+          socket?.emit("answer", { _id: user_id, name: user.name });
+        }
+        onAdd();
+        onClick();
+        return "Your answer was posted";
+      },
+      error: "Could not post",
+    });
   };
 
-  useEffect(() => {
-    if (error) {
-      onClick();
-      toast.error("Something went wrong");
-    }
-  });
   return (
     <>
       {isLoading && <Loading condition={true} />}
@@ -67,7 +63,6 @@ const AddAnswerForm = ({ onClick, onAdd, user_id, question }: PropTypes) => {
 
           <div className={styles.fields}>
             <div className={styles.field}>
-              <label>Body:</label>
               <textarea
                 rows={8}
                 placeholder="Enter answer body"

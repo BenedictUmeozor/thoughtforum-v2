@@ -33,11 +33,10 @@ const Answer = ({ answer, id, setAnswers, refetch }: PropTypes) => {
   } = useAxiosAuth("/answers/" + answer._id, "post");
   const { fetchData: getAnswers } = useAxiosInstance("/answers/" + id);
 
-  const {
-    isLoading: deleteLoading,
-    error: deleteError,
-    fetchData: deleteAnswer,
-  } = useAxiosAuth("/answers/" + answer._id, "delete");
+  const { isLoading: deleteLoading, fetchData: deleteAnswer } = useAxiosAuth(
+    "/answers/" + answer._id,
+    "delete"
+  );
 
   const fetchAnswers = async () => {
     const answers: AnswerType[] = await getAnswers();
@@ -58,15 +57,17 @@ const Answer = ({ answer, id, setAnswers, refetch }: PropTypes) => {
 
   const onDelete = async () => {
     if (!_id) {
-      toast.error("You need to be logged in");
-      return;
+      return toast.error("You need to be loggedin");
     }
-    const promise = await deleteAnswer();
 
-    if (promise) {
-      await refetch();
-      toast.success("Answer deleted");
-    }
+    toast.promise(deleteAnswer(), {
+      loading: "Deleting your answer...",
+      success: () => {
+        refetch();
+        return "Answer has been deleted";
+      },
+      error: "Failed to delete",
+    });
   };
 
   const displayForm = () => {
@@ -92,10 +93,10 @@ const Answer = ({ answer, id, setAnswers, refetch }: PropTypes) => {
   };
 
   useEffect(() => {
-    if (likeError || deleteError) {
+    if (likeError) {
       toast.error("Something went wrong");
     }
-  }, [likeError, deleteError]);
+  }, [likeError]);
 
   return (
     <>
@@ -111,7 +112,12 @@ const Answer = ({ answer, id, setAnswers, refetch }: PropTypes) => {
       </AnimatePresence>
       <AnimatePresence>
         {showLikes && answer && (
-          <LikesModal id={answer._id} onClose={hideLikes} title="answers" key={"likes"} />
+          <LikesModal
+            id={answer._id}
+            onClose={hideLikes}
+            title="answers"
+            key={"likes"}
+          />
         )}
       </AnimatePresence>
       <div className={styles.answer}>

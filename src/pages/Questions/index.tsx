@@ -21,7 +21,7 @@ import { setFixedBody } from "../../utils";
 import { useAxiosAuth, useAxiosInstance } from "../../hooks/useAxios";
 import { Answer as AnswerType, Question } from "../../helpers/types";
 import { Skeleton } from "@mui/material";
-import { useAppSelector, useSocket } from "../../hooks";
+import { useAppSelector, useQuestionContext, useSocket } from "../../hooks";
 import { formatRFC7231 } from "date-fns";
 import toast from "react-hot-toast";
 import EditQuestionForm from "../../components/Forms/EditQuestionForm";
@@ -37,6 +37,7 @@ const Questions = () => {
   const socket = useSocket();
   const user = useAppSelector((state) => state.user);
   const navigate = useNavigate();
+  const { setAppQuestions } = useQuestionContext();
 
   const { fetchData: getQuestion } = useAxiosInstance("/questions/" + id);
   const { fetchData: getAnswers } = useAxiosInstance("/answers/" + id);
@@ -51,11 +52,10 @@ const Questions = () => {
     error: followError,
   } = useAxiosAuth("/users/" + question?.user._id, "post");
 
-  const {
-    fetchData: deleteQuestion,
-    isLoading: deleteLoading,
-    error: deleteError,
-  } = useAxiosAuth("/questions/" + question?._id, "delete");
+  const { fetchData: deleteQuestion, isLoading: deleteLoading } = useAxiosAuth(
+    "/questions/" + question?._id,
+    "delete"
+  );
 
   const onDelete = async () => {
     if (!userId) {
@@ -63,12 +63,15 @@ const Questions = () => {
       return;
     }
 
-    const promise = await deleteQuestion();
-
-    if (promise) {
-      navigate("/");
-      toast.success("Your question was deleted");
-    }
+    toast.promise(deleteQuestion(), {
+      loading: "Deleting your question",
+      success: () => {
+        setAppQuestions();
+        navigate("/");
+        return "Your question was deleted";
+      },
+      error: "Failed to delete",
+    });
   };
 
   const getData = async () => {
@@ -150,12 +153,6 @@ const Questions = () => {
   useEffect(() => {
     getData();
   }, []);
-
-  useEffect(() => {
-    if (deleteError) {
-      toast.error("Something went wrong");
-    }
-  }, [deleteError, deleteLoading]);
 
   useEffect(() => {
     socket?.on("answerCreated", async () => {

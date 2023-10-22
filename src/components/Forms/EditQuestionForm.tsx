@@ -2,7 +2,7 @@ import { X } from "react-feather";
 import Modal from "../../layout/Modal";
 import styles from "./forms.module.scss";
 import { Question } from "../../helpers/types";
-import { useState, useEffect, FormEvent } from "react";
+import { useState, FormEvent } from "react";
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { useAxiosAuth, useAxiosInstance } from "../../hooks/useAxios";
 import toast from "react-hot-toast";
@@ -25,11 +25,11 @@ const EditQuestionForm = ({ onClick, question, onEdit }: PropTypes) => {
     body: question.body,
   });
 
-  const {
-    isLoading,
-    fetchData: editQuestion,
-    error,
-  } = useAxiosAuth("/questions/" + question._id, "put", { ...formData });
+  const { isLoading, fetchData: editQuestion } = useAxiosAuth(
+    "/questions/" + question._id,
+    "put",
+    { ...formData }
+  );
 
   const { fetchData: getQuestions } = useAxiosInstance("/questions");
 
@@ -42,25 +42,21 @@ const EditQuestionForm = ({ onClick, question, onEdit }: PropTypes) => {
       return;
     }
 
-    const promise = await editQuestion();
-
-    if (promise) {
-      const questions = await getQuestions();
-      dispatch(setQuestions(questions));
-      if (onEdit) {
-        onEdit();
-      }
-      onClick();
-      return toast.success("Your question was edited");
-    }
+    toast.promise(editQuestion(), {
+      loading: "Updating your answer",
+      success: () => {
+        getQuestions().then((questions) => {
+          dispatch(setQuestions(questions));
+        });
+        if (onEdit) {
+          onEdit();
+        }
+        onClick();
+        return "Your question was updated";
+      },
+      error: "Failed to update question",
+    });
   };
-
-  useEffect(() => {
-    if (error) {
-      onClick();
-      toast.error("Something went wrong");
-    }
-  }, [error, isLoading]);
 
   return (
     <>
@@ -76,7 +72,6 @@ const EditQuestionForm = ({ onClick, question, onEdit }: PropTypes) => {
 
           <div className={styles.fields}>
             <div className={styles.field}>
-              <label>Title:</label>
               <input
                 type="text"
                 placeholder="Enter title"
@@ -85,9 +80,9 @@ const EditQuestionForm = ({ onClick, question, onEdit }: PropTypes) => {
                   setFormdata({ ...formData, title: e.target.value })
                 }
               />
+              <div className={styles.line}></div>
             </div>
             <div className={styles.field}>
-              <label>Category:</label>
               <select
                 value={formData.category}
                 onChange={(e) =>
@@ -100,9 +95,9 @@ const EditQuestionForm = ({ onClick, question, onEdit }: PropTypes) => {
                   </option>
                 ))}
               </select>
+              <div className={styles.line}></div>
             </div>
             <div className={styles.field}>
-              <label>Body:</label>
               <textarea
                 rows={8}
                 placeholder="Enter question body"
@@ -111,6 +106,7 @@ const EditQuestionForm = ({ onClick, question, onEdit }: PropTypes) => {
                   setFormdata({ ...formData, body: e.target.value })
                 }
               ></textarea>
+              <div className={styles.line}></div>
             </div>
             <button>Update question</button>
           </div>

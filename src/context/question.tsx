@@ -7,9 +7,11 @@ import { setQuestions } from "../features/QuestionSlice";
 export const QuestionContext = createContext<{
   setAppQuestions: () => Promise<void>;
   error: boolean;
+  contextLoading: boolean;
 }>({
   setAppQuestions: async () => {},
   error: false,
+  contextLoading: false,
 });
 
 interface PropTypes {
@@ -18,7 +20,11 @@ interface PropTypes {
 
 export const QuestionContextProvider: React.FC<PropTypes> = ({ children }) => {
   const [error, setError] = useState(false);
-  const { fetchData, error: fetchError } = useAxiosInstance("/questions");
+  const {
+    fetchData,
+    error: fetchError,
+    isLoading: contextLoading,
+  } = useAxiosInstance("/questions");
   const dispatch = useAppDispatch();
 
   const setAppQuestions = async () => {
@@ -34,7 +40,9 @@ export const QuestionContextProvider: React.FC<PropTypes> = ({ children }) => {
   }, [fetchError]);
 
   return (
-    <QuestionContext.Provider value={{ setAppQuestions, error }}>
+    <QuestionContext.Provider
+      value={{ setAppQuestions, error, contextLoading }}
+    >
       {children}
     </QuestionContext.Provider>
   );

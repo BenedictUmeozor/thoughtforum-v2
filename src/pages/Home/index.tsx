@@ -15,7 +15,7 @@ import { Question as QuestionType } from "../../helpers/types";
 
 const Home = () => {
   const [showBtn, setShowBtn] = useState(false);
-  const { setAppQuestions } = useQuestionContext();
+  const { setAppQuestions, contextLoading } = useQuestionContext();
   const questions = useAppSelector((state) => state.questions);
   const [pageQuestions, setPageQuestions] = useState<QuestionType[] | null>(
     null
@@ -124,7 +124,7 @@ const Home = () => {
               )}
             </div>
             <div className={styles.questions}>
-              {!pageQuestions ? (
+              {!pageQuestions || contextLoading ? (
                 <>
                   <Skeleton
                     variant="rectangular"
