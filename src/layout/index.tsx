@@ -59,6 +59,7 @@ const RootLayout = () => {
         ? user + " liked your question"
         : "a user liked your question";
       toast.success(text);
+      console.log(user)
     });
 
     socket?.on("answer", (user) => {
@@ -66,6 +67,7 @@ const RootLayout = () => {
         ? user + " answered your question"
         : "a user answered your question";
       toast.success(text);
+      console.log(user)
     });
 
     socket?.on("follow", (user) => {
@@ -73,6 +75,7 @@ const RootLayout = () => {
         ? user + " started following you"
         : "a user started following you";
       toast.success(text);
+      console.log(user)
     });
   }, [socket]);
 
