@@ -1,5 +1,3 @@
-import React from "react";
-
 const Avatar = ({ name = "Benedict" }: { name?: string }) => {
   const letter = name[0].toUpperCase();
 
