@@ -18,7 +18,7 @@ import { useAuthRefresh } from "../hooks/useAuthRefresh";
 import toast from "react-hot-toast";
 import jwt_decode from "jwt-decode";
 import { deleteCredentials, setCredentials } from "../features/AuthSlice";
-import { Auth, Category } from "../helpers/types";
+import { Category } from "../helpers/types";
 import { useAxiosInstance } from "../hooks/useAxios";
 import { setCategories } from "../features/CategoriesSlice";
 import { deleteUser, setUser } from "../features/UserSlice";
@@ -59,7 +59,7 @@ const RootLayout = () => {
         ? user + " liked your question"
         : "a user liked your question";
       toast.success(text);
-      console.log(user)
+      console.log(user);
     });
 
     socket?.on("answer", (user) => {
@@ -67,7 +67,7 @@ const RootLayout = () => {
         ? user + " answered your question"
         : "a user answered your question";
       toast.success(text);
-      console.log(user)
+      console.log(user);
     });
 
     socket?.on("follow", (user) => {
@@ -75,7 +75,7 @@ const RootLayout = () => {
         ? user + " started following you"
         : "a user started following you";
       toast.success(text);
-      console.log(user)
+      console.log(user);
     });
   }, [socket]);
 
@@ -108,33 +108,40 @@ const RootLayout = () => {
 
   axiosAuth.interceptors.request.use(
     async (config) => {
-      const accessToken = JSON.parse(localStorage.getItem("accessToken")!);
+      try {
+        const accessToken = JSON.parse(localStorage.getItem("accessToken")!);
 
-      const expirationTime = jwt_decode<{
-        _id: string;
-        iat: number;
-        exp: number;
-      }>(accessToken).exp;
-
-      if (expirationTime * 1000 < Date.now()) {
-        const data: Auth = await getData();
-        if (!data) {
-          dispatch(deleteCredentials());
-          dispatch(deleteUser());
-          navigate("/login");
-          toast.error("Session expired. Login again");
+        if (!accessToken) {
+          throw new Error("Access token not found in local storage");
         }
-        dispatch(setCredentials(data));
+
+        const expirationTime = jwt_decode<{
+          _id: string;
+          iat: number;
+          exp: number;
+        }>(accessToken).exp;
+
+        if (expirationTime * 1000 < Date.now()) {
+          const data = await getData();
+          if (!data) {
+            throw new Error("Token refresh failed or no data returned");
+          }
+
+          dispatch(setCredentials(data));
+
+          config.headers.Authorization = JSON.parse(accessToken);
+        } else {
+          config.headers.Authorization = "Bearer " + accessToken;
+        }
+
+        return config;
+      } catch (error) {
+        dispatch(deleteCredentials());
         dispatch(deleteUser());
-
-        config.headers.Authorization = JSON.parse(
-          localStorage.getItem("accessToken")!
-        );
-      } else {
-        config.headers.Authorization = "Bearer " + accessToken;
+        navigate("/login");
+        console.error("Request interceptor error:", error);
+        return Promise.reject(error);
       }
-
-      return config;
     },
     (error) => {
       return Promise.reject(error);
