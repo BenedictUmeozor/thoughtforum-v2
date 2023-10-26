@@ -1,13 +1,19 @@
 import { Check, Plus } from "react-feather";
 import styles from "./widgets.module.scss";
+import { useQuestionContext } from "../../hooks";
 
 type PropTypes = {
   isFollowing?: boolean;
-  onFollow?: () => Promise<void>;
+  onFollow: () => Promise<void>;
   isLoading?: boolean;
 };
 
 const FollowBtn = ({ isFollowing, isLoading, onFollow }: PropTypes) => {
+  const { setAppQuestions } = useQuestionContext();
+  const handleClick = () => {
+    onFollow().then(() => setAppQuestions());
+  };
+
   return (
     <>
       {isFollowing ? (
@@ -22,7 +28,7 @@ const FollowBtn = ({ isFollowing, isLoading, onFollow }: PropTypes) => {
         <button
           disabled={isLoading}
           className={styles.button}
-          onClick={onFollow}
+          onClick={handleClick}
         >
           <Plus /> <p>follow</p>
         </button>
