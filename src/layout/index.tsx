@@ -109,9 +109,19 @@ const RootLayout = () => {
   axiosAuth.interceptors.request.use(
     async (config) => {
       try {
+        if (!localStorage.getItem("accessToken")) {
+          dispatch(deleteCredentials());
+          dispatch(deleteUser());
+          navigate("/login");
+          throw new Error("Access token not found in local storage");
+        }
+
         const accessToken = JSON.parse(localStorage.getItem("accessToken")!);
 
         if (!accessToken) {
+          dispatch(deleteCredentials());
+          dispatch(deleteUser());
+          navigate("/login");
           throw new Error("Access token not found in local storage");
         }
 
@@ -124,6 +134,9 @@ const RootLayout = () => {
         if (expirationTime * 1000 < Date.now()) {
           const data = await getData();
           if (!data) {
+            dispatch(deleteCredentials());
+            dispatch(deleteUser());
+            navigate("/login");
             throw new Error("Token refresh failed or no data returned");
           }
 
@@ -136,9 +149,6 @@ const RootLayout = () => {
 
         return config;
       } catch (error) {
-        dispatch(deleteCredentials());
-        dispatch(deleteUser());
-        navigate("/login");
         console.error("Request interceptor error:", error);
         return Promise.reject(error);
       }
