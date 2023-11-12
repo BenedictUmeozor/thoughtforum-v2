@@ -1,13 +1,13 @@
 import AddQuestionForm from "../../components/Forms/AddQuestionForm";
 import { setFixedBody } from "../../utils";
 import styles from "./home.module.scss";
-import { useState, useEffect } from "react";
+import { useState, useEffect, memo } from "react";
 import { AnimatePresence } from "framer-motion";
 import { useAppSelector } from "../../hooks";
 import { useAxiosInstance } from "../../hooks/useAxios";
 import { Link } from "react-router-dom";
 
-const QuestionBox = () => {
+const QuestionBox = memo(() => {
   const [showForm, setShowForm] = useState(false);
   const questions = useAppSelector((state) => state.questions);
   const { refreshToken } = useAppSelector((state) => state.auth);
@@ -65,5 +65,5 @@ const QuestionBox = () => {
       </div>
     </>
   );
-};
+});
 export default QuestionBox;

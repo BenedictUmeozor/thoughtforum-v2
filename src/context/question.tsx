@@ -1,4 +1,4 @@
-import { ReactNode, createContext, useEffect, useState } from "react";
+import { ReactNode, createContext, useEffect, useState, memo } from "react";
 import { useAxiosInstance } from "../hooks/useAxios";
 import { useAppDispatch } from "../hooks";
 import { Question } from "../helpers/types";
@@ -18,32 +18,34 @@ interface PropTypes {
   children: ReactNode;
 }
 
-export const QuestionContextProvider: React.FC<PropTypes> = ({ children }) => {
-  const [error, setError] = useState(false);
-  const {
-    fetchData,
-    error: fetchError,
-    isLoading: contextLoading,
-  } = useAxiosInstance("/questions");
-  const dispatch = useAppDispatch();
+export const QuestionContextProvider: React.FC<PropTypes> = memo(
+  ({ children }) => {
+    const [error, setError] = useState(false);
+    const {
+      fetchData,
+      error: fetchError,
+      isLoading: contextLoading,
+    } = useAxiosInstance("/questions");
+    const dispatch = useAppDispatch();
 
-  const setAppQuestions = async () => {
-    setError(false);
-    const questions: Question[] = await fetchData();
-    dispatch(setQuestions(questions));
-  };
+    const setAppQuestions = async () => {
+      setError(false);
+      const questions: Question[] = await fetchData();
+      dispatch(setQuestions(questions));
+    };
 
-  useEffect(() => {
-    if (fetchError) {
-      setError(true);
-    }
-  }, [fetchError]);
+    useEffect(() => {
+      if (fetchError) {
+        setError(true);
+      }
+    }, [fetchError]);
 
-  return (
-    <QuestionContext.Provider
-      value={{ setAppQuestions, error, contextLoading }}
-    >
-      {children}
-    </QuestionContext.Provider>
-  );
-};
+    return (
+      <QuestionContext.Provider
+        value={{ setAppQuestions, error, contextLoading }}
+      >
+        {children}
+      </QuestionContext.Provider>
+    );
+  }
+);

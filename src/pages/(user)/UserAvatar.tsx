@@ -1,9 +1,11 @@
+import { memo } from "react";
+
 type PropTypes = {
   name: string;
   className?: string;
 };
 
-const UserAvatar = ({ name, className }: PropTypes) => {
+const UserAvatar = memo(({ name, className }: PropTypes) => {
   const letter = name[0]?.toUpperCase();
 
   const getRandomColor = () => {
@@ -26,5 +28,5 @@ const UserAvatar = ({ name, className }: PropTypes) => {
       {letter}
     </div>
   );
-};
+});
 export default UserAvatar;

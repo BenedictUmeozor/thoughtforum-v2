@@ -4,7 +4,7 @@ import styles from "./user.module.scss";
 import Question from "./Question";
 import Box from "./Box";
 import { AnimatePresence } from "framer-motion";
-import { useState, useEffect } from "react";
+import { useState, useEffect, memo } from "react";
 import { setFixedBody } from "../../utils";
 import EditProfileForm from "../../components/Forms/EditProfileForm";
 import UserModal from "../../components/UserModal";
@@ -17,7 +17,7 @@ import { useAxiosAuth } from "../../hooks/useAxios";
 import { useNavigate } from "react-router-dom";
 import { formatRFC7231 } from "date-fns";
 
-const Profile = () => {
+const Profile = memo(() => {
   const [showForm, setShowForm] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [user, setUser] = useState<UserProfile | null>(null);
@@ -220,5 +220,5 @@ const Profile = () => {
       </ProtectedLayout>
     </>
   );
-};
+});
 export default Profile;

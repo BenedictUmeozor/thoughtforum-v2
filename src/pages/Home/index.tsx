@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, memo } from "react";
 import HotQuestions from "../../components/HotQuestions";
 import Question from "../../components/Question";
 import TopMembers from "../../components/TopMembers";
@@ -13,7 +13,7 @@ import { ArrowUp } from "react-feather";
 import { AnimatePresence, motion } from "framer-motion";
 import { Question as QuestionType } from "../../helpers/types";
 
-const Home = () => {
+const Home = memo(() => {
   const [showBtn, setShowBtn] = useState(false);
   const { setAppQuestions, contextLoading } = useQuestionContext();
   const questions = useAppSelector((state) => state.questions);
@@ -183,5 +183,5 @@ const Home = () => {
       </main>
     </>
   );
-};
+});
 export default Home;

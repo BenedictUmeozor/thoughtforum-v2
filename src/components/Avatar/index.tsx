@@ -1,4 +1,6 @@
-const Avatar = ({ name = "Benedict" }: { name?: string }) => {
+import { memo } from "react";
+
+const Avatar = memo(({ name = "Benedict" }: { name?: string }) => {
   const letter = name[0].toUpperCase();
 
   // Function to generate a random background color
@@ -22,6 +24,6 @@ const Avatar = ({ name = "Benedict" }: { name?: string }) => {
       <p>{letter}</p>
     </div>
   );
-};
+});
 
 export default Avatar;

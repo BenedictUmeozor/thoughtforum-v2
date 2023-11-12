@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { SetStateAction, useState, useEffect } from "react";
+import { SetStateAction, useState, useEffect, memo } from "react";
 import Avatar from "../Avatar";
 import styles from "./answer.module.scss";
 import { Edit2, Heart, MoreVertical, Trash2 } from "react-feather";
@@ -20,7 +20,7 @@ type PropTypes = {
   setAnswers: (value: SetStateAction<AnswerType[] | null>) => void;
 };
 
-const Answer = ({ answer, id, setAnswers, refetch }: PropTypes) => {
+const Answer = memo(({ answer, id, setAnswers, refetch }: PropTypes) => {
   const [showMenu, setShowMenu] = useState(false);
   const [showLikes, setShowLikes] = useState(false);
   const [showForm, setShowForm] = useState(false);
@@ -178,5 +178,5 @@ const Answer = ({ answer, id, setAnswers, refetch }: PropTypes) => {
       </div>
     </>
   );
-};
+});
 export default Answer;

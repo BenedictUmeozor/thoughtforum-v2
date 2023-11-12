@@ -8,7 +8,7 @@ import {
   Trash2,
   Edit2,
 } from "react-feather";
-import { useState } from "react";
+import { useState, memo } from "react";
 import Avatar from "../Avatar";
 import { setFixedBody } from "../../utils";
 import { AnimatePresence } from "framer-motion";
@@ -20,7 +20,7 @@ import { useAppSelector, useQuestionContext, useSocket } from "../../hooks";
 import { useAxiosAuth } from "../../hooks/useAxios";
 import toast from "react-hot-toast";
 
-const Question = ({ question }: { question: QuestionType }) => {
+const Question = memo(({ question }: { question: QuestionType }) => {
   const { _id } = useAppSelector((state) => state.auth);
   const [showMenu, setShowMenu] = useState(false);
   const [showForm, setShowForm] = useState(false);
@@ -205,5 +205,5 @@ const Question = ({ question }: { question: QuestionType }) => {
       </div>
     </>
   );
-};
+});
 export default Question;
